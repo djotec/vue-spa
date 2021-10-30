@@ -31,8 +31,8 @@
             <div class="card-footer">
                 <div class="d-flex">
 
-				<button class="btn btn-light flex-fill">
-                    <i class="far fa-thumbs-up"></i>
+				<button @click="like(id)" class="btn btn-light flex-fill">
+                    <i :class="liked"></i>
                     <span>Curtir</span>
                     </button>
 
@@ -60,14 +60,22 @@ export default {
     components: {
         GridVue,
     },
-    props: ['perfil', 'nome', 'data'],
+    props: ['id', 'perfil', 'nome', 'data'],
     data() {
         return {
             user: false,
-            curtiu: 'far',
+            liked: 'far fa-thumbs-up',
         }
     },
     methods: {
+        like(id){
+            if(this.liked == 'far fa-thumbs-up'){
+                this.liked = 'fas fa-thumbs-up';
+            } else{
+                this.liked = 'far fa-thumbs-up';
+            }
+            console.log(id)
+        },
         deleteContent() {
             this.$http
                 .get(this.$urlApi + `content/delete`, {
