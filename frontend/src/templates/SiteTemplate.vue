@@ -50,15 +50,17 @@ export default {
     },
     created() {
         console.log("created()");
-        let userAux = sessionStorage.getItem("user");
+        let userAux = this.$store.getters.getUser;
         if (userAux) {
-            this.user = JSON.parse(userAux);
+            this.user = this.$store.getters.getUser;
         } else {
             this.$router.push("/login");
         }
     },
     methods: {
         sair() {
+            
+            this.$store.commit('setUser', null),
             sessionStorage.clear();
             this.user = false;
             this.$router.push('/login')

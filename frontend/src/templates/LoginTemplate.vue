@@ -66,17 +66,13 @@ export default {
 
     created() {
         console.log("created()");
-        let userAux = sessionStorage.getItem("user");
+        let userAux = this.$store.getters.getUser;
+        console.log('vuex');
         if (userAux) {
-            this.user = JSON.parse(userAux);
+            console.log('home');
+            this.user = this.$store.getters.getUser;
             this.$router.push("/");
         }
-    },
-    methods: {
-        sair() {
-            sessionStorage.clear();
-            this.user = false;
-        },       
     }
 
 };

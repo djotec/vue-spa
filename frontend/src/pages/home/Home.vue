@@ -44,22 +44,17 @@
         </span>
 
         <span slot="principal">
-            <publicar-conteudo-vue :user="user"
-                :perfil="user.image"
-                :nome="user.name"
-                data="31/08/21 08:19"
-            />
+            <publicar-conteudo-vue />
 
-            <card-conteudo-vue
-                :perfil="user.image"
-                :nome="user.name"
-                data="31/08/21 08:19"
+            <card-conteudo-vue v-for="item in listContents" :key="item.id" 
+                :perfil="item.user.image"
+                :nome="item.user.name"
+                :data="item.user.posted_at"
             >
                 <card-post-vue
-                    img="https://materializecss.com/images/sample-1.jpg"
-                    txt="I am a very simple card. I am good at containing small bits of
-            information. I am convenient because I require little markup to use
-            effectively."
+                    :img="item.image"
+                    :txt="item.text"
+                    :link="item.link"
                 />
             </card-conteudo-vue>
         </span>
@@ -67,37 +62,22 @@
         <span slot="menudireito">
             <h3>Contatos</h3>
             <ContactList></ContactList>
-            
-            
         </span>
-
     </site-template>
 </template>
 
 <script>
-
 import ContactList from '@/components/ContactList.vue'
-import siteTemplate from "@/templates/SiteTemplate";
-import CardConteudoVue from "@/components/social/CardConteudoVue";
-import CardPostVue from "@/components/social/CardPostVue";
-import CardMenuVue from "@/components/layouts/CardMenuVue.vue";
-import PublicarConteudoVue from "@/components/social/PublicarConteudoVue";
-import GridVue from "@/components/layouts/GridVue.vue";
-import FooterVue from "@/components/layouts/FooterVue";
+import siteTemplate from '@/templates/SiteTemplate'
+import CardConteudoVue from '@/components/social/CardConteudoVue'
+import CardPostVue from '@/components/social/CardPostVue'
+import CardMenuVue from '@/components/layouts/CardMenuVue.vue'
+import PublicarConteudoVue from '@/components/social/PublicarConteudoVue'
+import GridVue from '@/components/layouts/GridVue.vue'
+import FooterVue from '@/components/layouts/FooterVue'
 
 export default {
-    name: "Home",
-    data() {
-        return {
-            user: false
-        };
-    },
-    created() {
-        let userAux = sessionStorage.getItem("user");
-        if (userAux) {
-            this.user = JSON.parse(userAux);
-        }
-    },
+    name: 'Home',
     components: {
         siteTemplate,
         CardConteudoVue,
@@ -106,9 +86,52 @@ export default {
         FooterVue,
         PublicarConteudoVue,
         CardMenuVue,
-        ContactList
+        ContactList,
     },
-};
+    data() {
+        return {
+            user: false
+        }
+    },
+    methods: {
+        loadUser() {
+            let userAux = this.$store.getters.getUser
+            if (userAux) {
+                this.user = this.$store.getters.getUser
+            }
+        },
+
+        loadContentList() {
+            this.$http
+                .get(this.$urlApi + `content/list`, {
+                    headers: {
+                        Authorization: `Bearer ${this.$store.getters.getToken}`,
+                    },
+                })
+                .then(({ data }) => {
+                    console.log(data)
+                    const responseData = data.data
+
+                    if (data.success) {
+                        this.$store.commit('setContentsTimeline', responseData.data )           
+                    }
+                    console.log(this.contents)
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+        },
+    },
+    created() {
+        this.loadUser()
+        this.loadContentList()
+    },
+    computed:{
+        listContents(){
+            return this.$store.getters.getContentsTimeline;         
+        }
+    }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

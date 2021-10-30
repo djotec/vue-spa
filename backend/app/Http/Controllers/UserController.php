@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use SebastianBergmann\Environment\Console;
 
 class UserController extends Controller
 {
@@ -40,7 +41,6 @@ class UserController extends Controller
         ]);
 
         $user->token = $user->createToken($user->email)->accessToken;
-        $user->image = asset($user->image);
 
         return [
             'success' => true,
@@ -60,20 +60,17 @@ class UserController extends Controller
             'password' => ['required', 'string'],
         ]);
 
-
         if ($validation->fails()) {
             return [
                 'success' => false,
                 'errors' => $validation->errors(),
                 'message' => 'Erro de Validação'
             ];
-            return $validation->errors();
         }
 
         if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']])) {
             $user = auth()->user();
             $user->token = $user->createToken($user->email)->accessToken;
-            $user->image = asset($user->image);
 
             return [
                 'success' => true,
@@ -84,7 +81,8 @@ class UserController extends Controller
         } else {
             return [
                 'success' => false,
-                'message' => 'Login Inválido'
+                'message' => 'Login Inválido',
+
             ];
         }
 
@@ -194,8 +192,10 @@ class UserController extends Controller
                 mkdir($parentDirectory, 0700);
             }
             if ($user->image) {
-                if (    file_exists($user->image)) {
-                    unlink($user->image);
+                $imgUser = str_replace(asset('/'), '', $user->image);
+
+                if (    file_exists($imgUser)) {
+                    unlink($imgUser);
                 }
             }
 
@@ -210,8 +210,6 @@ class UserController extends Controller
         }
 
         $user->save();
-
-        $user->image = asset($user->image);
         $user->token = $user->createToken($user->email)->accessToken;
 
         return [

@@ -30,7 +30,7 @@
                                     type="text"
                                     class="form-control form-control"
                                     placeholder="Nome"
-                                    v-model="name"
+                                    v-model="user.name"
                                 />
                             </div>
                             <div class="form-group col-md-12 mb-3">
@@ -38,7 +38,7 @@
                                     type="email"
                                     class="form-control form-control"
                                     placeholder="Email"
-                                    v-model="email"
+                                    v-model="user.email"
                                 />
                             </div>
                             <div class="form-group col-md-12 mb-3">
@@ -111,8 +111,6 @@ export default {
         return {
             showSignupForm: false,
             user: false,
-            name: "",
-            email: "",
             password: "",
             password_confirmation: "",
             image: "",
@@ -125,11 +123,9 @@ export default {
         GridVue,
     },
     created() {
-        let userAux = sessionStorage.getItem("user");
+        let userAux = this.$store.getters.getUser;
         if (userAux) {
-            this.user = JSON.parse(userAux);
-            this.name = this.user.name;
-            this.email = this.user.email;
+            this.user = this.$store.getters.getUser;
         }
     },
     methods: {
@@ -161,22 +157,23 @@ export default {
                 .put(
                     this.$urlApi+`profile`,
                     {
-                        name: this.name,
-                        email: this.email,
+                        name: this.user.name,
+                        email: this.user.email,
                         image: this.image,
                         password: this.password,
                         password_confirmation: this.password_confirmation,
                     },
                     {
                         headers: {  
-                            Authorization: `Bearer ${this.user.token}`,
+                            Authorization: `Bearer ${this.$store.getters.getToken}`,
                         },
                     }
                 )
                 .then(({ data }) => {
                     if (data.success) {
                         //Login com sucesso
-                        console.log(data);
+                        console.log(data);                        
+                        this.$store.commit('setUser', data.data),
                         this.user = data.data;
                         sessionStorage.setItem("user", JSON.stringify(this.user));
                         this.messages.push(data.message)

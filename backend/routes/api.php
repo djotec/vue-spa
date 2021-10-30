@@ -20,11 +20,18 @@ use Illuminate\Support\Facades\Route;
 Route::post('/cadastro', "UserController@cadastro");
 Route::post('/login', "UserController@login");
 Route::middleware('auth:api')->put('/profile', "UserController@profile");
+
 Route::middleware('auth:api')->post('/content/add', "ContentController@add");
+Route::middleware('auth:api')->get('/content/list', "ContentController@list");
+Route::middleware('auth:api')->get('/content/delete', "ContentController@delete");
 
 Route::get('/tests', function(){
     $user = User::find(1);
     $user2 = User::find(3);
+
+    $content = Content::all();
+
+
     /* Add Content
     $user->contents()->create([
         'title' => 'Conteudo 2',

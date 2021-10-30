@@ -143,6 +143,7 @@ export default {
                     if (data.success) {
                         //Login com sucesso
                         console.log("Login com sucesso");
+                        this.$store.commit('setUser', data.data),
                         sessionStorage.setItem("user", JSON.stringify(data.data));
                         this.$router.push("/");                        
 
@@ -155,7 +156,10 @@ export default {
                     } else {
                         //login não exite
                         console.log("login não exite");
-                        this.erros = Object.values(data.errors); 
+                         this.erros = [{ 0: data.message }];  
+                        console.log(this.erros);
+
+
                     }
                 })
                 .catch((e) => {
@@ -180,6 +184,7 @@ export default {
                     console.log(data);
                     if (data.success) {
                         //Cadastro realizado com sucesso
+                        this.$store.commit('setUser', data.data),
                         console.log("Cadastro realizado  com sucesso");
                         sessionStorage.setItem("user", JSON.stringify(data.data));                       
                         this.$router.push("/");
@@ -187,13 +192,13 @@ export default {
                     } else if (data.success == false && data.errors) {                        
                         this.isLoading = false;
                         //erros de validação
-                        console.log("erros de validação");
+                        console.log("erros de validação"); 
                         this.erros = Object.values(data.errors);    
 
                     } else {
-                        //login não exite
+                        //erro
                         this.erros = [
-                            { 0: "Erro no cadastro! Tente novamente mais tarde." },
+                            { 0: "Erro! Tente novamente mais tarde." },
                         ];
                     }
                 })
