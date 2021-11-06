@@ -18,7 +18,7 @@
                         </span>
                     </grid-vue>
                     <grid-vue tamanho="1">
-                        <button @click="deleteContent()" type="button" class="btn btn-light" >
+                        <button @click="deleteContent(idContent)" type="button" class="btn btn-light" >
                         <i class="fas fa-trash"></i>
                         </button>                       
                     </grid-vue>
@@ -31,7 +31,7 @@
             <div class="card-footer">
                 <div class="d-flex">
 
-				<button @click="like(id)" class="btn btn-light flex-fill">
+				<button @click="like(idContent)" class="btn btn-light flex-fill">
                     <i :class="liked"></i>
                     <span>Curtir</span>
                     </button>
@@ -45,6 +45,9 @@
                     <i class="far fa-share-square"></i>
                     <span>Compartilhar</span>
                     </button>
+                </div>
+                <div v-if="totalLike" class="d-flex">
+                    <p>curtido por {{ totalLike }} pessoa</p>
                 </div>
                 
             </div>
@@ -60,39 +63,63 @@ export default {
     components: {
         GridVue,
     },
-    props: ['id', 'perfil', 'nome', 'data'],
+    props: ['idContent', 'perfil', 'nome', 'data'],
     data() {
         return {
             user: false,
             liked: 'far fa-thumbs-up',
+            totalLike: 0,
         }
     },
     methods: {
         like(id){
-            if(this.liked == 'far fa-thumbs-up'){
-                this.liked = 'fas fa-thumbs-up';
-            } else{
-                this.liked = 'far fa-thumbs-up';
-            }
-            console.log(id)
-        },
-        deleteContent() {
+            
             this.$http
-                .get(this.$urlApi + `content/delete`, {
+                .put(this.$urlApi+`content/like/`+ id, {},
+                {
+                    headers: {  
+                        Authorization: `Bearer ${this.$store.getters.getToken}`,
+                    },
+                })
+                .then(({ data }) => {
+                    if (data.success){                        
+                        console.log(data); 
+                        this.totalLike = data.data; 
+                        if(this.liked == 'far fa-thumbs-up'){
+                            this.liked = 'fas fa-thumbs-up';
+                        } else{
+                            this.liked = 'far fa-thumbs-up';
+                        }
+                    } else {
+                        console.log(data.success.errors)
+                    }
+
+
+                })
+                .catch((e) => {
+                    console.log(e);
+
+                });
+
+            
+        },
+        deleteContent(id) {
+            this.$http
+                .put(this.$urlApi + `content/delete/`+id,{},
+                {
                     headers: {
                         Authorization: `Bearer ${this.$store.getters.getToken}`,
                     },
                 })
                 .then(({ data }) => {
-                    console.log(data)
-                    const responseData = data.data
-
                     
+                    if (data.success) {
+                        console.log(data)                        
+                    }             
                 })
                 .catch((e) => {
                     console.log(e)
-                })
-            console.log();
+                });
         }
     },
     created() {

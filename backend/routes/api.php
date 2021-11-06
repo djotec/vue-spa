@@ -23,7 +23,8 @@ Route::middleware('auth:api')->put('/profile', "UserController@profile");
 
 Route::middleware('auth:api')->post('/content/add', "ContentController@add");
 Route::middleware('auth:api')->get('/content/list', "ContentController@list");
-Route::middleware('auth:api')->get('/content/delete', "ContentController@delete");
+Route::middleware('auth:api')->put('/content/like/{id}', "ContentController@like");
+Route::middleware('auth:api')->put('/content/delete/{id}', "ContentController@delete");
 
 Route::get('/tests', function(){
     $user = User::find(1);

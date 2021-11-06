@@ -47,7 +47,7 @@
             <publicar-conteudo-vue />
 
             <card-conteudo-vue v-for="item in listContents" :key="item.id" 
-                :id="item.id"
+                :idContent="item.id"
                 :perfil="item.user.image"
                 :nome="item.user.name"
                 :data="item.user.posted_at"

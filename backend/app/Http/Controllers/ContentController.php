@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Validator;
 
 class ContentController extends Controller
 {
-    public function list(Request $request){
+    public function list(Request $request)
+    {
         $contents = Content::with('user')->orderBy('posted_at', 'DESC')->paginate(5);
 
         return [
@@ -54,18 +55,43 @@ class ContentController extends Controller
         ];
 
     }
+    public function like($id, Request $request)
+    {
+        $content = Content::find($id);
+        if($content){
+            $user = $request->user();
+            $user->likes()->toggle($content->id);
+            return [
+                'success' => true,
+                'data' => $content->likes()->count(),
+                'message' => 'Like'
+            ];
+
+        } else{
+            return [
+                'success' => false,
+                'errors' => 'Conteúdo não existe'
+            ];
+        }
+    }
 
     public function delete($id)
     {
         $content = Content::find($id);
+        if($content){
+            $content->delete($id);
+            return [
+                'success' => true,
+                'data' => null,
+                'message' => 'Item deletado'
+            ];
 
-        $content->delete();
-
-        return [
-            'success' => true,
-            'data' => null,
-            'message' => 'Lista de Conteúdos'
-        ];
+        } else{
+            return [
+                'success' => false,
+                'errors' => 'Conteúdo não existe'
+            ];
+        }
     }
 }
 
