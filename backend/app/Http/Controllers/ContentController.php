@@ -6,11 +6,21 @@ use Illuminate\Http\Request;
 use App\Content;
 use Illuminate\Support\Facades\Validator;
 
+use function PHPSTORM_META\elementType;
+
 class ContentController extends Controller
 {
     public function list(Request $request)
     {
         $contents = Content::with('user')->orderBy('posted_at', 'DESC')->paginate(5);
+        $user = $request->user();
+
+        foreach ($contents as $content) {
+            $content->total_likes = $content->likes()->count();
+            $iLikedThis = $user->likes()->where('id', $content->id)->exists();
+
+            $content->i_liked_this = $iLikedThis;
+        }
 
         return [
             'success' => true,
@@ -63,7 +73,10 @@ class ContentController extends Controller
             $user->likes()->toggle($content->id);
             return [
                 'success' => true,
-                'data' => $content->likes()->count(),
+                'data' => [
+                    'total_likes' => $content->likes()->count(),
+                    'contents' => $this->list($request),
+                 ],
                 'message' => 'Like'
             ];
 

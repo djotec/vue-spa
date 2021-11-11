@@ -29,10 +29,17 @@
             </div>
 
             <div class="card-footer">
+                
+                <div v-if="totalLikes" class="d-flex py-1 border-bottom">
+                    <p class="mb-0 text-muted">
+                        <i class="fas fa-sm fa-thumbs-up bg-primary text-white rounded-circle p-1"></i>
+                        {{ totalLikes }} curtidas</p>
+                </div>
+
                 <div class="d-flex">
 
-				<button @click="like(idContent)" class="btn btn-light flex-fill">
-                    <i :class="liked"></i>
+				<button @click="like(idContent)" class="btn btn-light flex-fill" :class="{'text-primary': likedThis}">
+                    <i class="fa-thumbs-up" :class="{'fas': likedThis, 'far': !likedThis}"></i>
                     <span>Curtir</span>
                     </button>
 
@@ -45,9 +52,6 @@
                     <i class="far fa-share-square"></i>
                     <span>Compartilhar</span>
                     </button>
-                </div>
-                <div v-if="totalLike" class="d-flex">
-                    <p>curtido por {{ totalLike }} pessoa</p>
                 </div>
                 
             </div>
@@ -63,12 +67,10 @@ export default {
     components: {
         GridVue,
     },
-    props: ['idContent', 'perfil', 'nome', 'data'],
+    props: ['idContent', 'perfil', 'nome', 'data', 'totalLikes', 'likedThis'],
     data() {
         return {
             user: false,
-            liked: 'far fa-thumbs-up',
-            totalLike: 0,
         }
     },
     methods: {
@@ -82,16 +84,14 @@ export default {
                     },
                 })
                 .then(({ data }) => {
+                    const responseData = data.data
+
                     if (data.success){                        
-                        console.log(data); 
-                        this.totalLike = data.data; 
-                        if(this.liked == 'far fa-thumbs-up'){
-                            this.liked = 'fas fa-thumbs-up';
-                        } else{
-                            this.liked = 'far fa-thumbs-up';
-                        }
+                        console.log(data);
+                        this.totalLike = responseData.total_likes; 
+                        this.$store.commit('setContentsTimeline', responseData.contents.data.data );
                     } else {
-                        console.log(data.success.errors)
+                        console.log(data.errors)
                     }
 
 

@@ -75,7 +75,7 @@ class UserController extends Controller
             return [
                 'success' => true,
                 'data' => $user,
-                'message' => 'Perfil atualizado com sucesso'
+                'message' => 'Login com sucesso'
             ];
             return $user;
         } else {

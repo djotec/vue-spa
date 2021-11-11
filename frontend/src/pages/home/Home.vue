@@ -48,6 +48,8 @@
 
             <card-conteudo-vue v-for="item in listContents" :key="item.id" 
                 :idContent="item.id"
+                :totalLikes="item.total_likes"
+                :likedThis="item.i_liked_this"
                 :perfil="item.user.image"
                 :nome="item.user.name"
                 :data="item.user.posted_at"
@@ -96,9 +98,9 @@ export default {
     },
     methods: {
         loadUser() {
-            let userAux = this.$store.getters.getUser
+            let userAux = this.$store.getters.getUser;
             if (userAux) {
-                this.user = this.$store.getters.getUser
+                this.user = this.$store.getters.getUser;
             }
         },
 
@@ -114,7 +116,7 @@ export default {
                     const responseData = data.data
 
                     if (data.success) {
-                        this.$store.commit('setContentsTimeline', responseData.data )           
+                        this.$store.commit('setContentsTimeline', responseData.data );         
                     }
                     console.log(this.contents)
                 })
