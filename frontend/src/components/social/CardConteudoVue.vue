@@ -12,15 +12,23 @@
                         <!-- notice the "circle" class -->
                     </grid-vue>
                     <grid-vue tamanho="10">
-                        <span class="black-text">
+                        <span class="d-block">
                             <strong>{{ nome }}</strong>
-                            <small>{{ data }}</small>
                         </span>
+                        <span class="mb-0 text-muted">
+                            <small>{{ contentPostedAt }}</small>
+                        </span>
+
                     </grid-vue>
                     <grid-vue tamanho="1">
-                        <button @click="deleteContent(idContent)" type="button" class="btn btn-light" >
-                        <i class="fas fa-trash"></i>
-                        </button>                       
+                        <div class="btn-group">
+  <button type="button" class="btn btn-light" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-ellipsis-h"></i>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="#"  @click="deleteContent(idContent)"><i class="fas fa-trash me-2"></i> Excluir</a></li>
+  </ul>
+</div>
                     </grid-vue>
                 </div>
             </div>
@@ -67,7 +75,7 @@ export default {
     components: {
         GridVue,
     },
-    props: ['idContent', 'perfil', 'nome', 'data', 'totalLikes', 'likedThis'],
+    props: ['idContent', 'perfil', 'nome', 'data', 'totalLikes', 'likedThis', 'contentPostedAt'],
     data() {
         return {
             user: false,

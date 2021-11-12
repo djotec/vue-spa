@@ -1,23 +1,20 @@
 <template>
     <site-template>
         <span slot="menuesquerdo">
-            <card-menu-vue>
-                <div class="row">
-                    <grid-vue tamanho="4">
+            <div class="mb-3">
+                <div class="d-flex align-items-center">
                         <img
                             :src="user.image"
                             :alt="user.name"
-                            class="img-fluid rounded-circle"
+                            class=" rounded-circle me-3"
+                            width="48"
+                            height="48"
                         />
-                        <!-- notice the "circle" class -->
-                    </grid-vue>
-                    <grid-vue tamanho="8">
-                        <span class="black-text">
-                            <h5 class="card-title">{{ user.name }}</h5>
-                        </span>
-                    </grid-vue>
+                        <div class="black-text">
+                            <span>{{ user.name }}</span>
+                        </div>
                 </div>
-            </card-menu-vue>
+            </div>
 
             <card-menu-vue>
                 <div class="row">
@@ -48,6 +45,7 @@
 
             <card-conteudo-vue v-for="item in listContents" :key="item.id" 
                 :idContent="item.id"
+                :contentPostedAt="item.posted_at"
                 :totalLikes="item.total_likes"
                 :likedThis="item.i_liked_this"
                 :perfil="item.user.image"
@@ -63,7 +61,7 @@
         </span>
 
         <span slot="menudireito">
-            <h3>Contatos</h3>
+            <h5 class="text-dark border-top">Contatos</h5>
             <ContactList></ContactList>
         </span>
     </site-template>
