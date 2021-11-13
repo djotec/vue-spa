@@ -18,17 +18,17 @@
                         <span class="mb-0 text-muted">
                             <small>{{ contentPostedAt }}</small>
                         </span>
-
                     </grid-vue>
+
                     <grid-vue tamanho="1">
                         <div class="btn-group">
-  <button type="button" class="btn btn-light" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-ellipsis-h"></i>
-  </button>
-  <ul class="dropdown-menu">
-    <li><a class="dropdown-item" href="#"  @click="deleteContent(idContent)"><i class="fas fa-trash me-2"></i> Excluir</a></li>
-  </ul>
-</div>
+                            <button type="button" class="btn btn-light" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#"  @click="deleteContent(idContent)"><i class="fas fa-trash me-2"></i> Excluir</a></li>
+                            </ul>
+                         </div>
                     </grid-vue>
                 </div>
             </div>
@@ -46,7 +46,7 @@
 
                 <div class="d-flex">
 
-				<button @click="like(idContent)" class="btn btn-light flex-fill" :class="{'text-primary': likedThis}">
+				<button @click="like(idContent)" class="btn btn-light flex-fill border-bottom mb-2" :class="{'text-primary': likedThis}">
                     <i class="fa-thumbs-up" :class="{'fas': likedThis, 'far': !likedThis}"></i>
                     <span>Curtir</span>
                     </button>
@@ -60,6 +60,48 @@
                     <i class="far fa-share-square"></i>
                     <span>Compartilhar</span>
                     </button>
+                </div>
+                <div>
+                    <div class="mb-3">
+                        <div class="row align-items-center">
+                            <grid-vue tamanho="1">
+                                <img
+                                    :src="perfil"
+                                    :alt="nome"
+                                    class="img-fluid rounded-circle"
+                                />
+                                <!-- notice the "circle" class -->
+                            </grid-vue>
+                            <grid-vue tamanho="10">
+                                <textarea class="form-control bg-muted" id="commentFormControl" placeholder="Escreva um comentário..." rows="1"></textarea>
+                            </grid-vue>
+                        </div>
+                        <div>
+                            <ul class="list-group">
+                                <li class="list-group-item">                                    
+                                    <div class="row align-items-center">
+                                        <grid-vue tamanho="1">
+                                            <img
+                                                :src="perfil"
+                                                :alt="nome"
+                                                class="img-fluid rounded-circle"
+                                            />
+                                        </grid-vue>
+                                        <grid-vue tamanho="10">
+                                            <span class="d-block">
+                                                <strong>Teu tio</strong>
+                                            </span>                                            
+                                            <p>Parabéns</p>
+                                        </grid-vue>
+                                    </div>                                    
+                                </li>
+                                <li class="list-group-item">
+                                    
+                                </li>
+                                </ul>                        
+                        </div>
+
+                    </div>
                 </div>
                 
             </div>
