@@ -27,10 +27,16 @@ Route::middleware('auth:api')->put('/content/like/{id}', "ContentController@like
 Route::middleware('auth:api')->put('/content/delete/{id}', "ContentController@delete");
 
 Route::get('/tests', function(){
-    $user = User::find(1);
-    $user2 = User::find(3);
+    $user = User::find(6);
 
-    $content = Content::all();
+    $content = Content::find(31);
+    // $user->comments()->create([
+    //     'content_id' => $content->id,
+    //     'text' => 'Eu sou o Melhor',
+    //     'posted_at' => date('Y-m-d')
+    // ]);
+
+    return $content->comments;
 
 
     /* Add Content

@@ -12,11 +12,12 @@ class ContentController extends Controller
 {
     public function list(Request $request)
     {
-        $contents = Content::with('user')->orderBy('posted_at', 'DESC')->paginate(5);
+        $contents = Content::with(['user', 'comments'])->orderBy('posted_at', 'DESC')->paginate(5);
         $user = $request->user();
 
         foreach ($contents as $content) {
             $content->total_likes = $content->likes()->count();
+            // $content->comments = $content->comments;
             $iLikedThis = $user->likes()->where('id', $content->id)->exists();
 
             $content->i_liked_this = $iLikedThis;

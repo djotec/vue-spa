@@ -37,12 +37,23 @@
             </div>
 
             <div class="card-footer">
-                
-                <div v-if="totalLikes" class="d-flex py-1 border-bottom">
-                    <p class="mb-0 text-muted">
-                        <i class="fas fa-sm fa-thumbs-up bg-primary text-white rounded-circle p-1"></i>
-                        {{ totalLikes }} curtidas</p>
+                <div class="row">
+                    <div class="col">
+                        <div v-if="totalLikes" class="d-flex py-1 border-bottom">
+                            <p class="mb-0 text-muted">
+                                <i class="fas fa-sm fa-thumbs-up bg-primary text-white rounded-circle p-1"></i>
+                                {{ totalLikes }} curtidas</p>
+                        </div>                        
+                    </div>
+                    <div class="col">
+                        <div class="d-flex py-1 border-bottom">
+                            <p class="mb-0 text-muted">                                
+                                {{ comments.length }} comementarios</p>
+                        </div>                          
+                    </div>
                 </div>
+                
+                
 
                 <div class="d-flex">
 
@@ -73,32 +84,52 @@
                                 <!-- notice the "circle" class -->
                             </grid-vue>
                             <grid-vue tamanho="10">
-                                <textarea class="form-control bg-muted" id="commentFormControl" placeholder="Escreva um comentário..." rows="1"></textarea>
+                                <form>
+                                <input type="text" class="form-control bg-muted" placeholder="Escreva um comentário...">
+                                </form>
                             </grid-vue>
                         </div>
                         <div>
                             <ul class="list-group">
-                                <li class="list-group-item">                                    
+                                <li class="list-group-item p-0 my-2 border-light" v-for="item in comments" :key="item.id">                                    
                                     <div class="row align-items-center">
                                         <grid-vue tamanho="1">
                                             <img
-                                                :src="perfil"
+                                                src="http://127.0.0.1:8000/profiles/profile_id6/1633521061.jpeg"
                                                 :alt="nome"
                                                 class="img-fluid rounded-circle"
                                             />
                                         </grid-vue>
                                         <grid-vue tamanho="10">
-                                            <span class="d-block">
-                                                <strong>Teu tio</strong>
-                                            </span>                                            
-                                            <p>Parabéns</p>
+                                            <div class="bg-light">                                                
+                                                <span class="d-block">
+                                                    <strong>Id do usuario = {{item.user_id}}</strong>
+                                                </span>                                            
+                                                <p>Parabéns</p>
+                                            </div>
                                         </grid-vue>
                                     </div>                                    
                                 </li>
-                                <li class="list-group-item">
-                                    
+                                <li class="list-group-item p-0 my-2 border-light ">                                    
+                                    <div class="row align-items-center">
+                                        <grid-vue tamanho="1">
+                                            <img
+                                                src="http://127.0.0.1:8000/profiles/profile_id6/1633521061.jpeg"
+                                                :alt="nome"
+                                                class="img-fluid rounded-circle"
+                                            />
+                                        </grid-vue>
+                                        <grid-vue tamanho="10">
+                                            <div class="bg-light">                                                
+                                                <span class="d-block">
+                                                    <strong>Teu tio</strong>
+                                                </span>                                            
+                                                <p>Parabéns</p>
+                                            </div>
+                                        </grid-vue>
+                                    </div>                                    
                                 </li>
-                                </ul>                        
+                            </ul>                        
                         </div>
 
                     </div>
@@ -117,7 +148,7 @@ export default {
     components: {
         GridVue,
     },
-    props: ['idContent', 'perfil', 'nome', 'data', 'totalLikes', 'likedThis', 'contentPostedAt'],
+    props: ['idContent', 'perfil', 'nome', 'data', 'totalLikes', 'likedThis', 'contentPostedAt', 'comments'],
     data() {
         return {
             user: false,

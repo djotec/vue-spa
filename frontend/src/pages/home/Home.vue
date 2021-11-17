@@ -48,6 +48,7 @@
                 :contentPostedAt="item.posted_at"
                 :totalLikes="item.total_likes"
                 :likedThis="item.i_liked_this"
+                :comments="item.comments"
                 :perfil="item.user.image"
                 :nome="item.user.name"
                 :data="item.user.posted_at"
