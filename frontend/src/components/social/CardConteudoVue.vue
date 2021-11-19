@@ -62,7 +62,8 @@
                     <span>Curtir</span>
                     </button>
 
-				<button class="btn btn-light flex-fill">
+				<!-- <button @click="jQuery('#inputComment' + idContent).focus()" class="btn btn-light flex-fill"> -->
+				<button @click="showComments()" class="btn btn-light flex-fill">
                     <i class="far fa-comment"></i>
                     <span>Comentar</span>
                     </button>
@@ -77,35 +78,35 @@
                         <div class="row align-items-center">
                             <grid-vue tamanho="1">
                                 <img
-                                    :src="perfil"
-                                    :alt="nome"
+                                    :src="user.image"
+                                    :alt="user.name"
                                     class="img-fluid rounded-circle"
                                 />
                                 <!-- notice the "circle" class -->
                             </grid-vue>
                             <grid-vue tamanho="10">
-                                <form>
-                                <input type="text" class="form-control bg-muted" placeholder="Escreva um comentário...">
+                                <form @submit.prevent="comment(idContent)" >
+                                <input @click="showComments()" :id="'inputComment' + idContent" v-model="textComment" type="text" class="form-control bg-muted" placeholder="Escreva um comentário...">
                                 </form>
                             </grid-vue>
                         </div>
                         <div>
-                            <ul class="list-group">
+                            <ul v-if="displayComments" class="list-group">
                                 <li class="list-group-item p-0 my-2 border-light" v-for="item in comments" :key="item.id">                                    
                                     <div class="row align-items-center">
                                         <grid-vue tamanho="1">
                                             <img
-                                                src="http://127.0.0.1:8000/profiles/profile_id6/1633521061.jpeg"
+                                                :src="item.user.image"
                                                 :alt="nome"
                                                 class="img-fluid rounded-circle"
                                             />
                                         </grid-vue>
                                         <grid-vue tamanho="10">
-                                            <div class="bg-light">                                                
+                                            <div class="bg-grey p-1">                                                
                                                 <span class="d-block">
-                                                    <strong>Id do usuario = {{item.user_id}}</strong>
+                                                    <strong> {{item.user.name}}</strong>
                                                 </span>                                            
-                                                <p>Parabéns</p>
+                                                <p class="m-0">{{item.text}}</p>
                                             </div>
                                         </grid-vue>
                                     </div>                                    
@@ -120,7 +121,7 @@
                                             />
                                         </grid-vue>
                                         <grid-vue tamanho="10">
-                                            <div class="bg-light">                                                
+                                            <div class="bg-grey">                                                
                                                 <span class="d-block">
                                                     <strong>Teu tio</strong>
                                                 </span>                                            
@@ -129,7 +130,11 @@
                                         </grid-vue>
                                     </div>                                    
                                 </li>
-                            </ul>                        
+                            </ul>                             
+                            <div  class="d-flex py-1 border-bottom">
+                                <a @click="showComments()" class="mb-0 text-muted">                                
+                                    Ver mais comementarios</a>
+                            </div> 
                         </div>
 
                     </div>
@@ -148,13 +153,46 @@ export default {
     components: {
         GridVue,
     },
-    props: ['idContent', 'perfil', 'nome', 'data', 'totalLikes', 'likedThis', 'contentPostedAt', 'comments'],
+    props: ['idContent', 'perfil', 'nome', 'posted_at', 'totalLikes', 'likedThis', 'contentPostedAt', 'comments'],
     data() {
         return {
             user: false,
+            displayComments:  false,
+            textComment: '',
         }
     },
     methods: {
+        showComments(){
+            this.displayComments = !this.displayComments;
+        },
+        comment(id){
+            if(this.textComment == ''){
+                return;
+            }
+            this.$http
+                .put(this.$urlApi+`content/comment/`+ id, {text:this.textComment},
+                {
+                    headers: {  
+                        Authorization: `Bearer ${this.$store.getters.getToken}`,
+                    },
+                })
+                .then(({ data }) => {
+                    const responseData = data.data
+
+                    if (data.success){ 
+                        this.textComment = '';                       
+                        console.log(data);
+                        this.$store.commit('setContentsTimeline', responseData.contents.data.data );
+                    } else {
+                        console.log(data.errors)
+                    }
+
+                })
+                .catch((e) => {
+                    console.log(e);
+                });            
+        },
+
         like(id){
             
             this.$http
@@ -214,4 +252,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.bg-grey {
+    background: #f0f2f5;
+}
 </style>

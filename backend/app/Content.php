@@ -29,4 +29,9 @@ class Content extends Model
     {
         return $this->belongsToMany(User::class, 'likes', 'content_id', 'user_id');
     }
+
+    public function getPostedAtAttribute($value){
+        $posted_at = date('d/m/Y à\s H:i', strtotime($value));
+        return $posted_at;
+    }
 }

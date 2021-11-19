@@ -12,11 +12,12 @@ class ContentController extends Controller
 {
     public function list(Request $request)
     {
-        $contents = Content::with(['user', 'comments'])->orderBy('posted_at', 'DESC')->paginate(5);
+        $contents = Content::with(['user'])->orderBy('posted_at', 'DESC')->paginate(5);
         $user = $request->user();
 
         foreach ($contents as $content) {
             $content->total_likes = $content->likes()->count();
+            $content->comments = $content->comments()->with('user')->get();
             // $content->comments = $content->comments;
             $iLikedThis = $user->likes()->where('id', $content->id)->exists();
 
@@ -79,6 +80,34 @@ class ContentController extends Controller
                     'contents' => $this->list($request),
                  ],
                 'message' => 'Like'
+            ];
+
+        } else{
+            return [
+                'success' => false,
+                'errors' => 'Conteúdo não existe'
+            ];
+        }
+
+    }
+    public function comment($id, Request $request)
+    {
+        $content = Content::find($id);
+        if($content){
+            $user = $request->user();
+
+            $user->comments()->create([
+                'content_id' => $content->id,
+                'text' => $request->text,
+                'posted_at' => date('Y-m-d H:i:s')
+            ]);
+
+            return [
+                'success' => true,
+                'data' => [
+                    'contents' => $this->list($request),
+                 ],
+                'message' => 'Comment added'
             ];
 
         } else{

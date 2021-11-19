@@ -51,7 +51,7 @@
                 :comments="item.comments"
                 :perfil="item.user.image"
                 :nome="item.user.name"
-                :data="item.user.posted_at"
+                :posted_at="item.user.posted_at"
             >
                 <card-post-vue
                     :img="item.image"
