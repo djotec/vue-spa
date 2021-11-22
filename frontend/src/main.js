@@ -34,7 +34,12 @@ var store = {
 			return state.user = n;
 		},
 		setContentsTimeline(state, n){
-			return state.contentsTimeline = n;
+			return state.contentsTimeline = n;		
+		},
+		setPaginationContentsTimeline(state, list){	
+			for(let item of list){
+				state.contentsTimeline.push(item);
+			}
 		}
 	}
 

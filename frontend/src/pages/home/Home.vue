@@ -59,6 +59,8 @@
                     :link="item.link"
                 />
             </card-conteudo-vue>
+            <button v-if="urlNextPage" @click="loadPagination()" class="btn btn-primary">Ver mais</button>
+
         </span>
 
         <span slot="menudireito">
@@ -92,7 +94,8 @@ export default {
     },
     data() {
         return {
-            user: false
+            user: false,
+            urlNextPage: null,
         }
     },
     methods: {
@@ -116,6 +119,7 @@ export default {
 
                     if (data.success) {
                         this.$store.commit('setContentsTimeline', responseData.data );         
+                        this.urlNextPage = responseData.next_page_url;
                     }
                     console.log(this.contents)
                 })
@@ -123,6 +127,31 @@ export default {
                     console.log(e)
                 })
         },
+        loadPagination(){
+            if(!this.urlNextPage){
+                return;
+            }
+            this.$http
+                .get(this.urlNextPage,{
+                    headers: {
+                        Authorization: `Bearer ${this.$store.getters.getToken}`,
+                    },
+                })
+                .then(({ data }) => {
+                    console.log(data)
+                    const responseData = data.data
+
+                    if (data.success) {
+                        this.$store.commit('setPaginationContentsTimeline', responseData.data );
+                        this.urlNextPage = responseData.next_page_url;
+     
+                    }
+                    console.log(this.contents)
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+        }
     },
     created() {
         this.loadUser()
