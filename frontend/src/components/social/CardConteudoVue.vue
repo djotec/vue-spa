@@ -48,7 +48,7 @@
                     <div class="col">
                         <div class="d-flex py-1 border-bottom">
                             <p class="mb-0 text-muted">                                
-                                {{ comments.length }} comementarios</p>
+                               {{ comments.length }} comementarios</p>
                         </div>                          
                     </div>
                 </div>
@@ -244,7 +244,7 @@ export default {
     created() {
         let userAux = sessionStorage.getItem('user')
         if (userAux) {
-            this.user = JSON.parse(userAux)
+            this.user = JSON.parse(userAux);
         }
     },
 }

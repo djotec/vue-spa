@@ -59,7 +59,9 @@
                     :link="item.link"
                 />
             </card-conteudo-vue>
-            <button v-if="urlNextPage" @click="loadPagination()" class="btn btn-primary">Ver mais</button>
+            <div v-scroll="handleScroll">
+                
+            </div>
 
         </span>
 
@@ -96,9 +98,21 @@ export default {
         return {
             user: false,
             urlNextPage: null,
+            stopscroll: false,
         }
     },
     methods: {
+        handleScroll() {
+            // console.log(window.scrollY);
+            // console.log(document.body.clientHeight);
+            if(this.stopscroll){
+                return;
+            }
+            if (window.scrollY >=  document.body.clientHeight -987) {
+                this.stopscroll = true;
+                this.loadPagination();
+            }
+        },
         loadUser() {
             let userAux = this.$store.getters.getUser;
             if (userAux) {
@@ -120,6 +134,8 @@ export default {
                     if (data.success) {
                         this.$store.commit('setContentsTimeline', responseData.data );         
                         this.urlNextPage = responseData.next_page_url;
+                        this.stopscroll = false;
+
                     }
                     console.log(this.contents)
                 })
@@ -143,7 +159,8 @@ export default {
 
                     if (data.success) {
                         this.$store.commit('setPaginationContentsTimeline', responseData.data );
-                        this.urlNextPage = responseData.next_page_url;
+                        this.urlNextPage = responseData.next_page_url;                        
+                        this.stopscroll = false;
      
                     }
                     console.log(this.contents)
