@@ -45,10 +45,10 @@
                                 {{ totalLikes }} curtidas</p>
                         </div>                        
                     </div>
-                    <div class="col">
-                        <div class="d-flex py-1 border-bottom">
+                    <div class="col" v-if="listComments.length">
+                        <div  class="d-flex py-1 border-bottom">
                             <p class="mb-0 text-muted">                                
-                               {{ comments.length }} comementarios</p>
+                               {{ listComments.length }} comentários</p>
                         </div>                          
                     </div>
                 </div>
@@ -159,6 +159,7 @@ export default {
             user: false,
             displayComments:  false,
             textComment: '',
+            listComments: this.comments || [],
         }
     },
     methods: {

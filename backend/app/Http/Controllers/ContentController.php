@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Content;
+use App\User;
 use Illuminate\Support\Facades\Validator;
 
 use function PHPSTORM_META\elementType;
@@ -29,6 +30,39 @@ class ContentController extends Controller
             'data' => $contents,
             'message' => 'Lista de Conteúdos'
         ];
+    }
+    public function profile($id, Request $request)
+    {
+        $owner = User::find($id);
+
+        if ($owner){
+            $contents = $owner->contents()->with(['user'])->orderBy('posted_at', 'DESC')->paginate(5);
+            // $contents = Content::with(['user'])->orderBy('posted_at', 'DESC')->paginate(5);
+            $user = $request->user();
+            foreach ($contents as $content) {
+                $content->total_likes = $content->likes()->count();
+                $content->comments = $content->comments()->with('user')->get();
+                // $content->comments = $content->comments;
+                $iLikedThis = $user->likes()->where('id', $content->id)->exists();
+
+                $content->i_liked_this = $iLikedThis;
+            }
+
+            return [
+                'success' => true,
+                'data' => $contents,
+                'message' => 'P Lista de Conteúdos'
+            ];
+
+        } else{
+            return [
+                'success' => false,
+                'errors' => 'Usuário não existe'
+            ];
+
+        }
+
+
     }
     public function add(Request $request)
     {

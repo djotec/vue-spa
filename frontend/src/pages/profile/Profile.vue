@@ -1,199 +1,187 @@
 <template>
     <site-template>
         <span slot="menuesquerdo">
-            <div class="row align-items-center">
-                <grid-vue tamanho="3">
-                    <img
-                        :src="user.image"
-                        :alt="user.name"
-                        class="img-fluid rounded-circle"
-                    />
-                </grid-vue>
-
-                <grid-vue tamanho="9">
-                    <div>
-                        <p class="h1">Perfil</p>
-                    </div>
-                </grid-vue>
+            <div class="mb-3">
+                <div class="d-flex align-items-center">
+                        <img
+                            :src="user.image"
+                            :alt="user.name"
+                            class=" rounded-circle me-3"
+                            width="48"
+                            height="48"
+                        />
+                        <div class="black-text">
+                            <span>{{ user.name }}</span>
+                        </div>
+                </div>
             </div>
+
+            <card-menu-vue>
+                <div class="row">
+                    <h4>Teste</h4>
+                </div>
+            </card-menu-vue>
+            <footer-vue
+                cor="green darken-1"
+                logo="Social"
+                descricao="Teste de descrição"
+                ano="2018"
+            >
+                <li><a class="grey-text text-lighten-3" href="#!">Home</a></li>
+                <li>
+                    <a class="grey-text text-lighten-3" href="#!">Link 2</a>
+                </li>
+                <li>
+                    <a class="grey-text text-lighten-3" href="#!">Link 3</a>
+                </li>
+                <li>
+                    <a class="grey-text text-lighten-3" href="#!">Link 4</a>
+                </li>
+            </footer-vue>
         </span>
 
         <span slot="principal">
-            <p class="h4">Configurações gerais da conta</p>
-            <hr />
-            <div class="mb-4">
-                <div class="card-body">
-                    <form @submit.prevent="update()">
-                        <div class="form-row">
-                            <div class="input-group col-md-12 mb-3">
-                                <input
-                                    type="text"
-                                    class="form-control form-control"
-                                    placeholder="Nome"
-                                    v-model="user.name"
-                                />
-                            </div>
-                            <div class="form-group col-md-12 mb-3">
-                                <input
-                                    type="email"
-                                    class="form-control form-control"
-                                    placeholder="Email"
-                                    v-model="user.email"
-                                />
-                            </div>
-                            <div class="form-group col-md-12 mb-3">
-                                <input
-                                    class="form-control"
-                                    type="file" 
-                                    v-on:change="saveImage"                                   
-                                />
-                            </div>
-                            <div class="form-group col-md-12 mb-3">
-                                <input
-                                    type="password"
-                                    class="form-control form-control"
-                                    placeholder="Senha"
-                                    v-model="password"
-                                />
-                            </div>
-                            <div class="form-group col-md-12 mb-3">
-                                <input
-                                    type="password"
-                                    class="form-control form-control"
-                                    placeholder="Confirme sua senha"
-                                    v-model="password_confirmation"
-                                />
-                            </div>
+            <publicar-conteudo-vue />
 
-                            <div class="d-grid gap-2 mb-3">
-                                <button type="submit" class="btn btn-primary">
-                                    Atualizar
-                                </button>
-                            </div>
-
-                            <div v-if="Array.isArray(messages) && messages.length > 0" class="alert alert-success" >
-                                 <ul class="list-unstyled">
-                                    <li
-                                        v-for="(msg, index) in messages"
-                                        :key="index"
-                                    >
-                                        {{ msg }}
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="d-grid gap-2 mb-3" v-if="erros">
-                                <ul class="list-unstyled">
-                                    <li
-                                        v-for="(erro, index) in erros"
-                                        :key="index"
-                                        class="text-center text-danger"
-                                    >
-                                        {{ erro[0] }}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+            <card-conteudo-vue v-for="item in listContents" :key="item.id" 
+                :idContent="item.id"
+                :contentPostedAt="item.posted_at"
+                :totalLikes="item.total_likes"
+                :likedThis="item.i_liked_this"
+                :comments="item.comments"
+                :perfil="item.user.image"
+                :nome="item.user.name"
+                :posted_at="item.user.posted_at"
+            >
+                <card-post-vue
+                    :img="item.image"
+                    :txt="item.text"
+                    :link="item.link"
+                />
+            </card-conteudo-vue>
+            <div v-scroll="handleScroll">
+                
             </div>
+
+        </span>
+
+        <span slot="menudireito">
+            <h5 class="text-dark border-top">Contatos</h5>
+            <ContactList></ContactList>
         </span>
     </site-template>
 </template>
 
 <script>
-import SiteTemplate from "@/templates/SiteTemplate";
-import GridVue from "@/components/layouts/GridVue";
+import ContactList from '@/components/ContactList.vue'
+import siteTemplate from '@/templates/SiteTemplate'
+import CardConteudoVue from '@/components/social/CardConteudoVue'
+import CardPostVue from '@/components/social/CardPostVue'
+import CardMenuVue from '@/components/layouts/CardMenuVue.vue'
+import PublicarConteudoVue from '@/components/social/PublicarConteudoVue'
+import GridVue from '@/components/layouts/GridVue.vue'
+import FooterVue from '@/components/layouts/FooterVue'
 
 export default {
-    name: "Profile",
+    name: 'Profile',
+    components: {
+        siteTemplate,
+        CardConteudoVue,
+        CardPostVue,
+        GridVue,
+        FooterVue,
+        PublicarConteudoVue,
+        CardMenuVue,
+        ContactList,
+    },
     data() {
         return {
-            showSignupForm: false,
             user: false,
-            password: "",
-            password_confirmation: "",
-            image: "",
-            erros: [],
-            messages: []
-        };
-    },
-    components: {
-        SiteTemplate,
-        GridVue,
-    },
-    created() {
-        let userAux = this.$store.getters.getUser;
-        if (userAux) {
-            this.user = this.$store.getters.getUser;
+            urlNextPage: null,
+            stopscroll: false,
         }
     },
     methods: {
-        saveImage(e){
-            let arquivo = e.target.files || e.dataTransfer.files;
-            if (!arquivo.length){
-                console.log('aqui');
+        handleScroll() {
+            // console.log(window.scrollY);
+            // console.log(document.body.clientHeight);
+            if(this.stopscroll){
                 return;
             }
-
-            let reader = new FileReader();
-            reader.onloadend = (e) => {
-                this.image =  e.target.result;
-            }            
-            reader.readAsDataURL(arquivo[0]);
-
-            setTimeout(() => {
-            }, 500)
-
-
+            if (window.scrollY >=  document.body.clientHeight -987) {
+                this.stopscroll = true;
+                this.loadPagination();
+            }
         },
-        /**
-         * Atualiza os dados do perfil
-         */
-        update() {
-            this.messages = [];
-            this.erros = [];                        
+        loadUser() {
+            let userAux = this.$store.getters.getUser;
+            if (userAux) {
+                this.user = this.$store.getters.getUser;
+            }
+        },
+
+        loadContentList() {
             this.$http
-                .put(
-                    this.$urlApi+`profile`,
-                    {
-                        name: this.user.name,
-                        email: this.user.email,
-                        image: this.image,
-                        password: this.password,
-                        password_confirmation: this.password_confirmation,
+                .get(this.$urlApi + `content/profile/list/` + this.$route.params.id, {
+                    headers: {
+                        Authorization: `Bearer ${this.$store.getters.getToken}`,
                     },
-                    {
-                        headers: {  
-                            Authorization: `Bearer ${this.$store.getters.getToken}`,
-                        },
-                    }
-                )
+                })
                 .then(({ data }) => {
+                    console.log(data)
+                    const responseData = data.data
+
                     if (data.success) {
-                        //Login com sucesso
-                        console.log(data);                        
-                        this.$store.commit('setUser', data.data),
-                        this.user = data.data;
-                        sessionStorage.setItem("user", JSON.stringify(this.user));
-                        this.messages.push(data.message)
-                    } else {
-                        //erros de validação
-                        this.erros = Object.values(data.errors);
+                        this.$store.commit('setContentsTimeline', responseData.data );         
+                        this.urlNextPage = responseData.next_page_url;
+                        this.stopscroll = false;
+
                     }
+                    console.log(this.contents)
                 })
                 .catch((e) => {
-                    console.log(e);
-                    this.erros = [{ 0: "Erro! Tente novamente mais tarde" }];                    
-                });
-        },        
+                    console.log(e)
+                })
+        },
+        loadPagination(){
+            if(!this.urlNextPage){
+                return;
+            }
+            this.$http
+                .get(this.urlNextPage,{
+                    headers: {
+                        Authorization: `Bearer ${this.$store.getters.getToken}`,
+                    },
+                })
+                .then(({ data }) => {
+                    console.log(data)
+                    const responseData = data.data
+
+                    if (data.success) {
+                        this.$store.commit('setPaginationContentsTimeline', responseData.data );
+                        this.urlNextPage = responseData.next_page_url;                        
+                        this.stopscroll = false;
+     
+                    }
+                    console.log(this.contents)
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+        }
     },
-};
+    created() {
+        this.loadUser()
+        this.loadContentList()
+    },
+    computed:{
+        listContents(){
+            return this.$store.getters.getContentsTimeline;         
+        }
+    }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-body {
-    background: #fff;
-}
 </style>
