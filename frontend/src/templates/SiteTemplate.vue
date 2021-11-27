@@ -6,7 +6,7 @@
                     <router-link to="/" class="nav-link active" >Página Inicial</router-link>
                 </li>
                 <li v-if="user" class="nav-item"> 
-                    <router-link to="/Settings" class="nav-link" >{{ user.name }}</router-link>
+                    <router-link to="/settings" class="nav-link" >{{ user.name }}</router-link>
                 </li>
                 <li v-if="user" class="nav-item"> 
                     <a v-on:click="sair()" class="nav-link">Sair</a>

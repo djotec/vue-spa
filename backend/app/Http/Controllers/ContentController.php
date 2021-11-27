@@ -51,7 +51,7 @@ class ContentController extends Controller
             return [
                 'success' => true,
                 'data' => $contents,
-                'message' => 'P Lista de Conteúdos'
+                'message' => 'Lista de Conteúdos'
             ];
 
         } else{

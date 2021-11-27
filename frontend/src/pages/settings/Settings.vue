@@ -155,7 +155,7 @@ export default {
             this.erros = [];                        
             this.$http
                 .put(
-                    this.$urlApi+`profile`,
+                    this.$urlApi+`settings`,
                     {
                         name: this.user.name,
                         email: this.user.email,

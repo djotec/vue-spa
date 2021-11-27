@@ -88,7 +88,7 @@ class UserController extends Controller
 
     }
 
-    public function profile(Request $request)
+    public function settings(Request $request)
     {
         $user = $request->user();
         $data = $request->all();
