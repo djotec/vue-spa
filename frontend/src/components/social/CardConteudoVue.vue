@@ -4,16 +4,20 @@
             <div class="card-header border-0">
                 <div class="row align-items-center">
                     <grid-vue tamanho="1">
-                        <img
-                            :src="perfil"
-                            :alt="nome"
-                            class="img-fluid rounded-circle"
-                        />
+                        <router-link :to="'/'+userId+'/'+$slug(nome)" class="nav-link text-black p-0" >
+                            <img
+                                :src="perfil"
+                                :alt="nome"
+                                class="img-fluid rounded-circle"
+                            />
+                        </router-link>
                         <!-- notice the "circle" class -->
                     </grid-vue>
                     <grid-vue tamanho="10">
                         <span class="d-block">
-                            <strong>{{ nome }}</strong>
+                            <router-link :to="'/'+userId+'/'+$slug(nome)" class="nav-link text-black p-0" >
+                                <strong>{{ nome }}</strong>
+                            </router-link>
                         </span>
                         <span class="mb-0 text-muted">
                             <small>{{ contentPostedAt }}</small>
@@ -153,7 +157,7 @@ export default {
     components: {
         GridVue,
     },
-    props: ['idContent', 'perfil', 'nome', 'posted_at', 'totalLikes', 'likedThis', 'contentPostedAt', 'comments'],
+    props: ['idContent', 'perfil', 'nome', 'posted_at', 'totalLikes', 'likedThis', 'contentPostedAt', 'comments', 'userId'],
     data() {
         return {
             user: false,

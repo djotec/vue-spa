@@ -16,15 +16,15 @@ export default [
     component: Login
   },
   {
-    path: '/:id/:nome?',
-    name: 'Profile',
-    component: Profile
-  },  
-  
-  {
     path: '/settings',
     name: 'Settings',
     component: Settings
   },
+  {
+    path: '/:id/:nome?',
+    name: 'Profile',
+    component: Profile
+  },  
+ 
   
 ]

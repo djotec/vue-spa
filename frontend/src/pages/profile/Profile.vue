@@ -1,80 +1,81 @@
 <template>
-    <site-template>
-        <span slot="menuesquerdo">
-            <div class="mb-3">
-                <div class="d-flex align-items-center">
-                        <img
-                            :src="user.image"
-                            :alt="user.name"
-                            class=" rounded-circle me-3"
-                            width="48"
-                            height="48"
-                        />
-                        <div class="black-text">
-                            <span>{{ user.name }}</span>
-                        </div>
-                </div>
-            </div>
-
-            <card-menu-vue>
-                <div class="row">
-                    <h4>Teste</h4>
-                </div>
-            </card-menu-vue>
-            <footer-vue
-                cor="green darken-1"
-                logo="Social"
-                descricao="Teste de descrição"
-                ano="2018"
-            >
-                <li><a class="grey-text text-lighten-3" href="#!">Home</a></li>
-                <li>
-                    <a class="grey-text text-lighten-3" href="#!">Link 2</a>
-                </li>
-                <li>
-                    <a class="grey-text text-lighten-3" href="#!">Link 3</a>
-                </li>
-                <li>
-                    <a class="grey-text text-lighten-3" href="#!">Link 4</a>
-                </li>
-            </footer-vue>
-        </span>
+    <FullWidthTemplate>
 
         <span slot="principal">
-            <publicar-conteudo-vue />
 
-            <card-conteudo-vue v-for="item in listContents" :key="item.id" 
-                :idContent="item.id"
-                :contentPostedAt="item.posted_at"
-                :totalLikes="item.total_likes"
-                :likedThis="item.i_liked_this"
-                :comments="item.comments"
-                :perfil="item.user.image"
-                :nome="item.user.name"
-                :posted_at="item.user.posted_at"
-            >
-                <card-post-vue
-                    :img="item.image"
-                    :txt="item.text"
-                    :link="item.link"
-                />
-            </card-conteudo-vue>
-            <div v-scroll="handleScroll">
-                
-            </div>
+            <section class="bg-white border-bottom mb-3">
+                <div class="container">
+                    <div class="row mb-4 justify-content-center">
+                        <div class="col-sm-8">
+                            <div class="card border-0">
+                                <div class="profile-cover rounded-2">
+                                    <img src="https://scontent.fthe11-1.fna.fbcdn.net/v/t1.6435-9/s960x960/95215567_1978125858987408_3147256591745548288_n.jpg?_nc_cat=107&ccb=1-5&_nc_sid=e3f864&_nc_eui2=AeE6DsGp-yvKN_XS8aN7I-Gwo68BJt0pKyijrwEm3SkrKCMaQ71Q3-2qDW1qeNbET6LZoiHg9yT4RckfoU_4swL9&_nc_ohc=hDLPcMd_6JwAX8XLZnq&_nc_ht=scontent.fthe11-1.fna&oh=a7b4d91e0065266d70649b10a40c17a4&oe=61CBA909"
+                                    class="card-img-top" alt="...">
+                                </div>
+                                <div class="card-body profile-info">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <img
+                                                :src="owner.image"
+                                                :alt="owner.name"
+                                                class=" rounded-circle img-fluid me-3 profile-pic border border-3 border-white"
+                                                width="150"
+                                                height="150"
+                                            />
+                                        </div>
+                                        <div class="col-md-6">
+                                            <h1>{{ owner.name }}</h1>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button @click="friend(owner.id)" class="btn btn-secondary rounded-2">Seguir</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-sm-8">
+
+                            <publicar-conteudo-vue />
+
+                            <card-conteudo-vue v-for="item in listContents" :key="item.id" 
+                                :idContent="item.id"
+                                :contentPostedAt="item.posted_at"
+                                :totalLikes="item.total_likes"
+                                :likedThis="item.i_liked_this"
+                                :comments="item.comments"
+                                :userId="item.user.id"
+                                :perfil="item.user.image"
+                                :nome="item.user.name"
+                                :posted_at="item.user.posted_at"
+                            >
+                                <card-post-vue
+                                    :img="item.image"
+                                    :txt="item.text"
+                                    :link="item.link"
+                                />
+                            </card-conteudo-vue>
+                            <div v-scroll="handleScroll">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
         </span>
-
-        <span slot="menudireito">
-            <h5 class="text-dark border-top">Contatos</h5>
-            <ContactList></ContactList>
-        </span>
-    </site-template>
+    </FullWidthTemplate>
 </template>
 
 <script>
 import ContactList from '@/components/ContactList.vue'
-import siteTemplate from '@/templates/SiteTemplate'
+import FullWidthTemplate from '@/templates/FullWidthTemplate'
 import CardConteudoVue from '@/components/social/CardConteudoVue'
 import CardPostVue from '@/components/social/CardPostVue'
 import CardMenuVue from '@/components/layouts/CardMenuVue.vue'
@@ -85,7 +86,7 @@ import FooterVue from '@/components/layouts/FooterVue'
 export default {
     name: 'Profile',
     components: {
-        siteTemplate,
+        FullWidthTemplate,
         CardConteudoVue,
         CardPostVue,
         GridVue,
@@ -93,15 +94,20 @@ export default {
         PublicarConteudoVue,
         CardMenuVue,
         ContactList,
+        
     },
     data() {
         return {
             user: false,
             urlNextPage: null,
             stopscroll: false,
+            owner:{image:'', name:''}
         }
     },
     methods: {
+        friend($id){
+            console.log('id: '+$id)
+        },
         handleScroll() {
             // console.log(window.scrollY);
             // console.log(document.body.clientHeight);
@@ -132,9 +138,10 @@ export default {
                     const responseData = data.data
 
                     if (data.success) {
-                        this.$store.commit('setContentsTimeline', responseData.data );         
-                        this.urlNextPage = responseData.next_page_url;
+                        this.$store.commit('setContentsTimeline', responseData.contents.data );         
+                        this.urlNextPage = responseData.contents.next_page_url;
                         this.stopscroll = false;
+                        this.owner = responseData.owner;
 
                     }
                     console.log(this.contents)
@@ -157,7 +164,7 @@ export default {
                     console.log(data)
                     const responseData = data.data
 
-                    if (data.success) {
+                    if (data.success && this.route.name == 'Profile') {
                         this.$store.commit('setPaginationContentsTimeline', responseData.data );
                         this.urlNextPage = responseData.next_page_url;                        
                         this.stopscroll = false;
@@ -184,4 +191,23 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.profile-cover {
+    min-height: 264px;
+    position: relative;
+    overflow: hidden;
+}
+.profile-cover img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    display: block;
+}
+
+.profile-pic{
+    margin-top: -64px;
+     z-index: 20;
+    position: relative;
+    
+}
 </style>

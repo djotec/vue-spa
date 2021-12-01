@@ -3,6 +3,7 @@
         <span slot="menuesquerdo">
             <div class="mb-3">
                 <div class="d-flex align-items-center">
+                        <router-link :to="'/'+user.id+'/'+$slug(user.name)" class="nav-link text-black p-0" >
                         <img
                             :src="user.image"
                             :alt="user.name"
@@ -10,8 +11,11 @@
                             width="48"
                             height="48"
                         />
+                        </router-link>
                         <div class="black-text">
-                            <span>{{ user.name }}</span>
+                            <router-link :to="'/'+user.id+'/'+$slug(user.name)" class="nav-link text-black p-0" >
+                                <span>{{ user.name }}</span>
+                            </router-link>
                         </div>
                 </div>
             </div>
@@ -49,6 +53,7 @@
                 :totalLikes="item.total_likes"
                 :likedThis="item.i_liked_this"
                 :comments="item.comments"
+                :userId="item.user.id"
                 :perfil="item.user.image"
                 :nome="item.user.name"
                 :posted_at="item.user.posted_at"
@@ -96,7 +101,7 @@ export default {
     },
     data() {
         return {
-            user: false,
+            user: {image: '', name: ''},
             urlNextPage: null,
             stopscroll: false,
         }
@@ -128,7 +133,6 @@ export default {
                     },
                 })
                 .then(({ data }) => {
-                    console.log(data)
                     const responseData = data.data
 
                     if (data.success) {
@@ -137,7 +141,6 @@ export default {
                         this.stopscroll = false;
 
                     }
-                    console.log(this.contents)
                 })
                 .catch((e) => {
                     console.log(e)
@@ -154,16 +157,15 @@ export default {
                     },
                 })
                 .then(({ data }) => {
-                    console.log(data)
                     const responseData = data.data
 
-                    if (data.success) {
+                    if (data.success && this.$route.name == 'Home') {
                         this.$store.commit('setPaginationContentsTimeline', responseData.data );
                         this.urlNextPage = responseData.next_page_url;                        
                         this.stopscroll = false;
+                        console.log('home');
      
                     }
-                    console.log(this.contents)
                 })
                 .catch((e) => {
                     console.log(e)

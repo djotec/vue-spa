@@ -50,7 +50,9 @@ class ContentController extends Controller
 
             return [
                 'success' => true,
-                'data' => $contents,
+                'data' => [
+                    'contents' => $contents,
+                    'owner' => $owner],
                 'message' => 'Lista de Conteúdos'
             ];
 
