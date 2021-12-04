@@ -125,7 +125,9 @@ export default {
             }
         },
 
-        loadContentList() {
+        loadFriendsList(){
+            /*
+
             this.$http
                 .get(this.$urlApi + `content/list`, {
                     headers: {
@@ -140,6 +142,38 @@ export default {
                         this.urlNextPage = responseData.next_page_url;
                         this.stopscroll = false;
 
+                    }
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+
+                */
+               console.log('loadFriends')
+
+        },
+
+        loadContentList() {
+            let userAux = this.$store.getters.getUser;
+            if ( !userAux) {
+                return;
+            }
+
+            this.$http
+                .get(this.$urlApi + `content/list`, {
+                    headers: {
+                        Authorization: `Bearer ${this.$store.getters.getToken}`,
+                    },
+                })
+                .then(({ data }) => {
+                    const responseData = data.data
+
+                    if (data.success) {
+                        this.$store.commit('setContentsTimeline', responseData.data );         
+                        this.urlNextPage = responseData.next_page_url;
+                        this.stopscroll = false;
+                                        
+                        this.loadFriendsList();
                     }
                 })
                 .catch((e) => {

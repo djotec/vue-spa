@@ -29,6 +29,10 @@ Route::middleware('auth:api')->put('/content/delete/{id}', "ContentController@de
 
 Route::middleware('auth:api')->get('/content/profile/list/{id}', "ContentController@profile");
 
+Route::middleware('auth:api')->post('/user/friend', "UserController@friend");
+// listFriends ListFriendsProfile
+Route::middleware('auth:api')->get('/user/listfriends', "UserController@listFriends");
+Route::middleware('auth:api')->get('/user/listfriendsprofile/{id}', "UserController@listFriendsProfile");
 Route::get('/tests', function(){
     $user = User::find(6);
 

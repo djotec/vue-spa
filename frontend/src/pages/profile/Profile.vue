@@ -27,7 +27,7 @@
                                             <h1>{{ owner.name }}</h1>
                                         </div>
                                         <div class="col-md-3">
-                                            <button @click="friend(owner.id)" class="btn btn-secondary rounded-2">Seguir</button>
+                                            <button v-if="isFriendPage" @click="follow(owner.id)" class="btn btn-secondary rounded-2">Seguir</button>
                                         </div>
                                     </div>
                                 </div>
@@ -101,12 +101,36 @@ export default {
             user: false,
             urlNextPage: null,
             stopscroll: false,
-            owner:{image:'', name:''}
+            owner:{image:'', name:''},
+            isFriendPage: true,
         }
     },
     methods: {
-        friend($id){
-            console.log('id: '+$id)
+        follow(id){
+            console.log('id: '+id);
+
+            this.$http
+                .post(this.$urlApi+`user/friend/`,{'id':id},
+                {
+                    headers: {  
+                        Authorization: `Bearer ${this.$store.getters.getToken}`,
+                    },
+                })
+                .then(({ data }) => {
+
+                    if (data.success){                        
+                        console.log(data);
+                        
+                    } else {
+                        console.log(data.errors)
+                    }
+
+
+                })
+                .catch((e) => {
+                    console.log(e);
+
+                });
         },
         handleScroll() {
             // console.log(window.scrollY);
@@ -142,6 +166,10 @@ export default {
                         this.urlNextPage = responseData.contents.next_page_url;
                         this.stopscroll = false;
                         this.owner = responseData.owner;
+
+                        if (this.owner.id != this.user.id) {
+                            this.isFriendPage = true;
+                        } 
 
                     }
                     console.log(this.contents)

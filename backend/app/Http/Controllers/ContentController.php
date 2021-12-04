@@ -154,14 +154,14 @@ class ContentController extends Controller
         }
     }
 
-    public function delete($id)
+    public function delete($id, Request $request)
     {
         $content = Content::find($id);
         if($content){
             $content->delete($id);
             return [
                 'success' => true,
-                'data' => null,
+                'data' => $this->list($request),
                 'message' => 'Item deletado'
             ];
 

@@ -48,7 +48,7 @@ export default {
         NavBar,
         GridVue,
     },
-    created() {
+    beforeCreate() {
         console.log("created()");
         let userAux = this.$store.getters.getUser;
         if (userAux) {

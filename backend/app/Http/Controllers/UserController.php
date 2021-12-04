@@ -219,4 +219,59 @@ class UserController extends Controller
         ];
 
     }
+
+    public function friend(Request $request)
+    {
+        $user = $request->user();
+        $friend = User::find($request->id);
+
+        if ($friend && ($user->id != $friend->id)) {
+            $user->friends()->toggle($friend->id);
+            return [
+                'success' => true,
+                'data' => $user->friends,
+                'message' => 'Amigo adicionado'
+            ];
+        } else {
+            return [
+                'success' => false,
+                'errors' => 'Usuário inexistente'
+            ];
+        }
+    }
+
+    public function listFriends(Request $request){
+        $user = $request->user();
+        if ($user) {
+            return [
+                'success' => true,
+                'data' => $user->friends,
+                'message' => 'Lista de Amigos'
+            ];
+        } else {
+            return [
+                'success' => false,
+                'errors' => 'Usuário inexistente'
+            ];
+        }
+    }
+    public function listFriendsProfile($id, Request $request){
+        $userProfile = User::find($id);
+        $logged = $request->user;
+        if ($userProfile) {
+            return [
+                'success' => true,
+                'data' => [
+                    'friends' => $userProfile->friends,
+                    'friendsLogged' => $logged->friends,
+                 ],
+                'message' => 'Lista de Amigos'
+            ];
+        } else {
+            return [
+                'success' => false,
+                'errors' => 'Usuário inexistente'
+            ];
+        }
+    }
 }

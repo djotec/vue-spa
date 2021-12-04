@@ -235,10 +235,12 @@ export default {
                         Authorization: `Bearer ${this.$store.getters.getToken}`,
                     },
                 })
-                .then(({ data }) => {
+                .then(({ data }) => {                    
+                    const responseData = data.data
                     
                     if (data.success) {
-                        console.log(data)                        
+                        console.log(data);
+                        this.$store.commit('setContentsTimeline', responseData.contents.data.data );                     
                     }             
                 })
                 .catch((e) => {
