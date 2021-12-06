@@ -2,19 +2,19 @@
   <div class="contact-list__item">
       <div class="d-flex align-items-center">
           <img
-                :src="user.image"
-                :alt="user.name"
+                :src="friendImage"
+                :alt="friendName"
                 class="img-fluid rounded-circle contact-list__photo"
             />
 
-            <span>{{user.name}}</span>
+            <span>{{friendName}}</span>
       </div>
   </div>
 </template>
 
 <script>
 export default {
-    
+    props: ['friendImage', 'friendName'],
     data() {
         return {
             user: false

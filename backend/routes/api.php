@@ -31,8 +31,8 @@ Route::middleware('auth:api')->get('/content/profile/list/{id}', "ContentControl
 
 Route::middleware('auth:api')->post('/user/friend', "UserController@friend");
 // listFriends ListFriendsProfile
-Route::middleware('auth:api')->get('/user/listfriends', "UserController@listFriends");
-Route::middleware('auth:api')->get('/user/listfriendsprofile/{id}', "UserController@listFriendsProfile");
+Route::middleware('auth:api')->get('/user/friendsList', "UserController@friendsList");
+Route::middleware('auth:api')->get('/user/friendsListProfile/{id}', "UserController@friendsListProfile");
 Route::get('/tests', function(){
     $user = User::find(6);
 

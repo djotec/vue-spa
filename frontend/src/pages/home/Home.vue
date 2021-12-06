@@ -72,7 +72,11 @@
 
         <span slot="menudireito">
             <h5 class="text-dark border-top">Contatos</h5>
-            <ContactList></ContactList>
+            <ContactList
+                :listFriends="friends"
+                >
+            </ContactList>
+            <div v-if="!friends.length">Nenhum Usuário</div>
         </span>
     </site-template>
 </template>
@@ -104,6 +108,7 @@ export default {
             user: {image: '', name: ''},
             urlNextPage: null,
             stopscroll: false,
+            friends: [],
         }
     },
     methods: {
@@ -126,10 +131,9 @@ export default {
         },
 
         loadFriendsList(){
-            /*
-
+            
             this.$http
-                .get(this.$urlApi + `content/list`, {
+                .get(this.$urlApi + `user/friendsList`, {
                     headers: {
                         Authorization: `Bearer ${this.$store.getters.getToken}`,
                     },
@@ -138,17 +142,16 @@ export default {
                     const responseData = data.data
 
                     if (data.success) {
-                        this.$store.commit('setContentsTimeline', responseData.data );         
-                        this.urlNextPage = responseData.next_page_url;
-                        this.stopscroll = false;
-
+                        this.friends = responseData;
+                        console.log(data);
+                    } else {                        
+                        console.log(data.errors)
                     }
                 })
                 .catch((e) => {
                     console.log(e)
                 })
 
-                */
                console.log('loadFriends')
 
         },
@@ -197,7 +200,6 @@ export default {
                         this.$store.commit('setPaginationContentsTimeline', responseData.data );
                         this.urlNextPage = responseData.next_page_url;                        
                         this.stopscroll = false;
-                        console.log('home');
      
                     }
                 })

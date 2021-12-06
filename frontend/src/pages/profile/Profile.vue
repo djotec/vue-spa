@@ -150,6 +150,32 @@ export default {
             }
         },
 
+        loadFriendsList(id){
+            
+            this.$http
+                .get(this.$urlApi + `user/friendsListProfile/`+id, {
+                    headers: {
+                        Authorization: `Bearer ${this.$store.getters.getToken}`,
+                    },
+                })
+                .then(({ data }) => {
+                    const responseData = data.data
+
+                    if (data.success) {
+                        this.friends = responseData;
+                        console.log(data);
+                    } else {                        
+                        console.log(data.errors)
+                    }
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+
+               console.log('loadFriends')
+
+        },
+
         loadContentList() {
             this.$http
                 .get(this.$urlApi + `content/profile/list/` + this.$route.params.id, {
@@ -170,6 +196,8 @@ export default {
                         if (this.owner.id != this.user.id) {
                             this.isFriendPage = true;
                         } 
+
+                        loadFriendsList(this.owner.id);
 
                     }
                     console.log(this.contents)

@@ -240,7 +240,7 @@ class UserController extends Controller
         }
     }
 
-    public function listFriends(Request $request){
+    public function friendsList(Request $request){
         $user = $request->user();
         if ($user) {
             return [
@@ -255,7 +255,7 @@ class UserController extends Controller
             ];
         }
     }
-    public function listFriendsProfile($id, Request $request){
+    public function friendsListProfile($id, Request $request){
         $userProfile = User::find($id);
         $logged = $request->user;
         if ($userProfile) {
