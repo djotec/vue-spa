@@ -257,7 +257,7 @@ class UserController extends Controller
     }
     public function friendsListProfile($id, Request $request){
         $userProfile = User::find($id);
-        $logged = $request->user;
+        $logged = $request->user();
         if ($userProfile) {
             return [
                 'success' => true,

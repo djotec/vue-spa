@@ -1,16 +1,17 @@
 <template>
     <FullWidthTemplate>
-
         <span slot="principal">
-
             <section class="bg-white border-bottom mb-3">
                 <div class="container">
                     <div class="row mb-4 justify-content-center">
                         <div class="col-sm-8">
                             <div class="card border-0">
                                 <div class="profile-cover rounded-2">
-                                    <img src="https://scontent.fthe11-1.fna.fbcdn.net/v/t1.6435-9/s960x960/95215567_1978125858987408_3147256591745548288_n.jpg?_nc_cat=107&ccb=1-5&_nc_sid=e3f864&_nc_eui2=AeE6DsGp-yvKN_XS8aN7I-Gwo68BJt0pKyijrwEm3SkrKCMaQ71Q3-2qDW1qeNbET6LZoiHg9yT4RckfoU_4swL9&_nc_ohc=hDLPcMd_6JwAX8XLZnq&_nc_ht=scontent.fthe11-1.fna&oh=a7b4d91e0065266d70649b10a40c17a4&oe=61CBA909"
-                                    class="card-img-top" alt="...">
+                                    <img
+                                        src="https://scontent.fthe11-1.fna.fbcdn.net/v/t1.6435-9/s960x960/95215567_1978125858987408_3147256591745548288_n.jpg?_nc_cat=107&ccb=1-5&_nc_sid=e3f864&_nc_eui2=AeE6DsGp-yvKN_XS8aN7I-Gwo68BJt0pKyijrwEm3SkrKCMaQ71Q3-2qDW1qeNbET6LZoiHg9yT4RckfoU_4swL9&_nc_ohc=hDLPcMd_6JwAX8XLZnq&_nc_ht=scontent.fthe11-1.fna&oh=a7b4d91e0065266d70649b10a40c17a4&oe=61CBA909"
+                                        class="card-img-top"
+                                        alt="..."
+                                    />
                                 </div>
                                 <div class="card-body profile-info">
                                     <div class="row">
@@ -18,7 +19,13 @@
                                             <img
                                                 :src="owner.image"
                                                 :alt="owner.name"
-                                                class=" rounded-circle img-fluid me-3 profile-pic border border-3 border-white"
+                                                class="
+                                                    rounded-circle
+                                                    img-fluid
+                                                    me-3
+                                                    profile-pic
+                                                    border border-3 border-white
+                                                "
                                                 width="150"
                                                 height="150"
                                             />
@@ -27,7 +34,13 @@
                                             <h1>{{ owner.name }}</h1>
                                         </div>
                                         <div class="col-md-3">
-                                            <button v-if="isFriendPage" @click="follow(owner.id)" class="btn btn-secondary rounded-2">Seguir</button>
+                                            <button
+                                                v-if="isFriendPage"
+                                                @click="follow(owner.id)"
+                                                class="btn btn-primary"
+                                            >
+                                                {{ textButton }}
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -41,34 +54,52 @@
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-sm-8">
-
-                            <publicar-conteudo-vue />
-
-                            <card-conteudo-vue v-for="item in listContents" :key="item.id" 
-                                :idContent="item.id"
-                                :contentPostedAt="item.posted_at"
-                                :totalLikes="item.total_likes"
-                                :likedThis="item.i_liked_this"
-                                :comments="item.comments"
-                                :userId="item.user.id"
-                                :perfil="item.user.image"
-                                :nome="item.user.name"
-                                :posted_at="item.user.posted_at"
-                            >
-                                <card-post-vue
-                                    :img="item.image"
-                                    :txt="item.text"
-                                    :link="item.link"
-                                />
-                            </card-conteudo-vue>
-                            <div v-scroll="handleScroll">
-                                
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <div class="card shadow-sm w-100 mb-3">
+                                        <div class="card-body ">
+                                            <h4 class="text-dark">Amigos</h4> 
+                                            <div class="row">
+                                                
+                                                <div class="col-sm-4" v-for="item in friendsList" :key="item.id">
+                                                     <router-link :to="'/'+item.id+'/'+$slug(item.name)" class="text-black p-0" >
+                                                        <img :src="item.image" class="card-img-top rounded-2" :alt="item.name">
+                                                            <span class="text-dark border-top">{{ item.name }}</span>
+                                                        </router-link>
+                                                </div>
+                                                
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-7">
+                                    <card-conteudo-vue
+                                        v-for="item in listContents"
+                                        :key="item.id"
+                                        :idContent="item.id"
+                                        :contentPostedAt="item.posted_at"
+                                        :totalLikes="item.total_likes"
+                                        :likedThis="item.i_liked_this"
+                                        :comments="item.comments"
+                                        :userId="item.user.id"
+                                        :perfil="item.user.image"
+                                        :nome="item.user.name"
+                                        :posted_at="item.user.posted_at"
+                                    >
+                                        <card-post-vue
+                                            :img="item.image"
+                                            :txt="item.text"
+                                            :link="item.link"
+                                        />
+                                    </card-conteudo-vue>
+                                    <div v-scroll="handleScroll"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-
         </span>
     </FullWidthTemplate>
 </template>
@@ -94,66 +125,62 @@ export default {
         PublicarConteudoVue,
         CardMenuVue,
         ContactList,
-        
     },
     data() {
         return {
             user: false,
             urlNextPage: null,
             stopscroll: false,
-            owner:{image:'', name:''},
+            owner: { image: '', name: '' },
             isFriendPage: true,
+            friendsList: [],
+            friendsLoggedList: [],
+            textButton: 'Seguir',
         }
     },
     methods: {
-        follow(id){
-            console.log('id: '+id);
+        isFriend(){
+            this.textButton
+
+            for ( let friend of this.friendsLoggedList ) {    
+                if ( friend.id == this.owner.id ){
+                 this.textButton = "Deixar de seguir";
+                 return;
+                }
+            }
+            this.textButton = "Seguir";
+            
+        },
+        follow(id) {
+            console.log('id: ' + id)
 
             this.$http
-                .post(this.$urlApi+`user/friend/`,{'id':id},
-                {
-                    headers: {  
-                        Authorization: `Bearer ${this.$store.getters.getToken}`,
-                    },
-                })
+                .post(
+                    this.$urlApi + `user/friend/`,
+                    { id: id },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${this.$store.getters.getToken}`,
+                        },
+                    }
+                )
                 .then(({ data }) => {
-
-                    if (data.success){                        
-                        console.log(data);
-                        
+                    if (data.success) {
+                        this.friendsList = data.data;
+                        this.isFriend();
+                        console.log(data)
                     } else {
                         console.log(data.errors)
                     }
-
-
                 })
                 .catch((e) => {
-                    console.log(e);
-
-                });
-        },
-        handleScroll() {
-            // console.log(window.scrollY);
-            // console.log(document.body.clientHeight);
-            if(this.stopscroll){
-                return;
-            }
-            if (window.scrollY >=  document.body.clientHeight -987) {
-                this.stopscroll = true;
-                this.loadPagination();
-            }
-        },
-        loadUser() {
-            let userAux = this.$store.getters.getUser;
-            if (userAux) {
-                this.user = this.$store.getters.getUser;
-            }
+                    console.log(e)
+                })
         },
 
-        loadFriendsList(id){
-            
+        loadFriendsLoggedList(id) {
             this.$http
-                .get(this.$urlApi + `user/friendsListProfile/`+id, {
+                .get(this.$urlApi + `user/friendsListProfile/` + id, {
                     headers: {
                         Authorization: `Bearer ${this.$store.getters.getToken}`,
                     },
@@ -162,9 +189,11 @@ export default {
                     const responseData = data.data
 
                     if (data.success) {
-                        this.friends = responseData;
-                        console.log(data);
-                    } else {                        
+                        this.friendsList = responseData.friends
+                        this.friendsList = responseData.friendsLogged;
+                        this.isFriend();
+                        console.log(data)
+                    } else {
                         console.log(data.errors)
                     }
                 })
@@ -172,33 +201,40 @@ export default {
                     console.log(e)
                 })
 
-               console.log('loadFriends')
-
-        },
+            console.log('loadFriends')
+        },       
 
         loadContentList() {
             this.$http
-                .get(this.$urlApi + `content/profile/list/` + this.$route.params.id, {
-                    headers: {
-                        Authorization: `Bearer ${this.$store.getters.getToken}`,
-                    },
-                })
+                .get(
+                    this.$urlApi +
+                        `content/profile/list/` +
+                        this.$route.params.id,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${this.$store.getters.getToken}`,
+                        },
+                    }
+                )
                 .then(({ data }) => {
                     console.log(data)
                     const responseData = data.data
 
                     if (data.success) {
-                        this.$store.commit('setContentsTimeline', responseData.contents.data );         
-                        this.urlNextPage = responseData.contents.next_page_url;
-                        this.stopscroll = false;
-                        this.owner = responseData.owner;
+                        this.$store.commit(
+                            'setContentsTimeline',
+                            responseData.contents.data
+                        )
+                        this.urlNextPage = responseData.contents.next_page_url
+                        this.stopscroll = false
+                        this.owner = responseData.owner
 
                         if (this.owner.id != this.user.id) {
-                            this.isFriendPage = true;
-                        } 
+                            this.isFriendPage = true
+                        }
 
-                        loadFriendsList(this.owner.id);
-
+                        this.loadFriendsLoggedList(this.owner.id);
+                        this.isFriend();
                     }
                     console.log(this.contents)
                 })
@@ -206,12 +242,12 @@ export default {
                     console.log(e)
                 })
         },
-        loadPagination(){
-            if(!this.urlNextPage){
-                return;
+        loadPagination() {
+            if (!this.urlNextPage) {
+                return
             }
             this.$http
-                .get(this.urlNextPage,{
+                .get(this.urlNextPage, {
                     headers: {
                         Authorization: `Bearer ${this.$store.getters.getToken}`,
                     },
@@ -221,27 +257,47 @@ export default {
                     const responseData = data.data
 
                     if (data.success && this.route.name == 'Profile') {
-                        this.$store.commit('setPaginationContentsTimeline', responseData.data );
-                        this.urlNextPage = responseData.next_page_url;                        
-                        this.stopscroll = false;
-     
+                        this.$store.commit(
+                            'setPaginationContentsTimeline',
+                            responseData.data
+                        )
+                        this.urlNextPage = responseData.next_page_url
+                        this.stopscroll = false
                     }
                     console.log(this.contents)
                 })
                 .catch((e) => {
                     console.log(e)
                 })
-        }
+        },
+
+        handleScroll() {
+            // console.log(window.scrollY);
+            // console.log(document.body.clientHeight);
+            if (this.stopscroll) {
+                return
+            }
+            if (window.scrollY >= document.body.clientHeight - 987) {
+                this.stopscroll = true
+                this.loadPagination()
+            }
+        },
+        loadUser() {
+            let userAux = this.$store.getters.getUser
+            if (userAux) {
+                this.user = this.$store.getters.getUser
+            }
+        },
     },
     created() {
         this.loadUser()
         this.loadContentList()
     },
-    computed:{
-        listContents(){
-            return this.$store.getters.getContentsTimeline;         
-        }
-    }
+    computed: {
+        listContents() {
+            return this.$store.getters.getContentsTimeline
+        },
+    },
 }
 </script>
 
@@ -260,10 +316,9 @@ export default {
     display: block;
 }
 
-.profile-pic{
+.profile-pic {
     margin-top: -64px;
-     z-index: 20;
+    z-index: 20;
     position: relative;
-    
 }
 </style>
