@@ -3,7 +3,7 @@
         <div class="card-body p-0">
             <div class="card-header border-0">
                 <div class="row align-items-center">
-                    <grid-vue tamanho="1">
+                    <grid-vue tamanho="1 px-2">
                         <router-link :to="'/'+userId+'/'+$slug(nome)" class="nav-link text-black p-0" >
                             <img
                                 :src="perfil"
@@ -13,7 +13,7 @@
                         </router-link>
                         <!-- notice the "circle" class -->
                     </grid-vue>
-                    <grid-vue tamanho="10">
+                    <grid-vue tamanho="9">
                         <span class="d-block">
                             <router-link :to="'/'+userId+'/'+$slug(nome)" class="nav-link text-black p-0" >
                                 <strong>{{ nome }}</strong>
@@ -24,7 +24,7 @@
                         </span>
                     </grid-vue>
 
-                    <grid-vue tamanho="1">
+                    <grid-vue tamanho="2 text-end">
                         <div class="btn-group">
                             <button type="button" class="btn btn-light" data-bs-toggle="dropdown" aria-expanded="false">
                                                     <i class="fas fa-ellipsis-h"></i>
@@ -171,11 +171,18 @@ export default {
             this.displayComments = !this.displayComments;
         },
         comment(id){
+            let url = '';
+            if (this.$route.name == 'Home'){
+                url = 'content/comment/';
+            } else {
+                url = 'content/commentprofile/';
+            }
+
             if(this.textComment == ''){
                 return;
             }
             this.$http
-                .put(this.$urlApi+`content/comment/`+ id, {text:this.textComment},
+                .put(this.$urlApi+url+ id, {text:this.textComment},
                 {
                     headers: {  
                         Authorization: `Bearer ${this.$store.getters.getToken}`,
@@ -186,8 +193,14 @@ export default {
 
                     if (data.success){ 
                         this.textComment = '';                       
-                        console.log(data);
-                        this.$store.commit('setContentsTimeline', responseData.contents.data.data );
+                        console.log(data);                       
+
+                        if (this.$route.name == 'Home'){
+                            this.$store.commit('setContentsTimeline', responseData.data.data );
+                        } else {                    
+                            this.$store.commit('setContentsTimeline', responseData.data.contents.data );
+                        }
+
                     } else {
                         console.log(data.errors)
                     }
@@ -199,9 +212,15 @@ export default {
         },
 
         like(id){
+            let url = '';
+            if (this.$route.name == 'Home'){
+                url = 'content/like/';
+            } else {
+                url = 'content/likeprofile/';
+            }
             
             this.$http
-                .put(this.$urlApi+`content/like/`+ id, {},
+                .put(this.$urlApi+url+ id, {},
                 {
                     headers: {  
                         Authorization: `Bearer ${this.$store.getters.getToken}`,
@@ -212,8 +231,13 @@ export default {
 
                     if (data.success){                        
                         console.log(data);
-                        this.totalLike = responseData.total_likes; 
-                        this.$store.commit('setContentsTimeline', responseData.contents.data.data );
+                        this.totalLike = responseData.total_likes;  
+
+                        if (this.$route.name == 'Home'){
+                            this.$store.commit('setContentsTimeline', responseData.contents.data.data );
+                        } else {                    
+                            this.$store.commit('setContentsTimeline', responseData.contents.data.contents.data );
+                        }
                     } else {
                         console.log(data.errors)
                     }

@@ -1,20 +1,23 @@
 <template>
   <div class="contact-list__item">
-      <div class="d-flex align-items-center">
-          <img
-                :src="friendImage"
-                :alt="friendName"
-                class="img-fluid rounded-circle contact-list__photo"
-            />
+      <div class="d-flex align-items-center"> 
+          <router-link :to="'/'+friendId+'/'+$slug(friendName)" class="nav-link text-black p-0"> 
+      
+            <img
+                    :src="friendImage"
+                    :alt="friendName"
+                    class="img-fluid rounded-circle contact-list__photo"
+                />
 
-            <span>{{friendName}}</span>
+                <span>{{friendName}}</span> 
+            </router-link>
       </div>
   </div>
 </template>
 
 <script>
 export default {
-    props: ['friendImage', 'friendName'],
+    props: ['friendImage', 'friendName', 'friendId'],
     data() {
         return {
             user: false

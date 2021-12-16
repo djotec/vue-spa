@@ -25,6 +25,8 @@ Route::middleware('auth:api')->post('/content/add', "ContentController@add");
 Route::middleware('auth:api')->get('/content/list', "ContentController@list");
 Route::middleware('auth:api')->put('/content/like/{id}', "ContentController@like");
 Route::middleware('auth:api')->put('/content/comment/{id}', "ContentController@comment");
+Route::middleware('auth:api')->put('/content/likeprofile/{id}', "ContentController@likeProfile");
+Route::middleware('auth:api')->put('/content/commentprofile/{id}', "ContentController@commentProfile");
 Route::middleware('auth:api')->put('/content/delete/{id}', "ContentController@delete");
 
 Route::middleware('auth:api')->get('/content/profile/list/{id}', "ContentController@profile");

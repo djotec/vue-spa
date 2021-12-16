@@ -126,6 +126,29 @@ class ContentController extends Controller
         }
 
     }
+    public function likeProfile($id, Request $request)
+    {
+        $content = Content::find($id);
+        if($content){
+            $user = $request->user();
+            $user->likes()->toggle($content->id);
+            return [
+                'success' => true,
+                'data' => [
+                    'total_likes' => $content->likes()->count(),
+                    'contents' => $this->profile($content->user_id, $request),
+                 ],
+                'message' => 'Like'
+            ];
+
+        } else{
+            return [
+                'success' => false,
+                'errors' => 'Conteúdo não existe'
+            ];
+        }
+
+    }
     public function comment($id, Request $request)
     {
         $content = Content::find($id);
@@ -140,9 +163,32 @@ class ContentController extends Controller
 
             return [
                 'success' => true,
-                'data' => [
-                    'contents' => $this->list($request),
-                 ],
+                'data' => $this->list($request),
+                'message' => 'Comment added'
+            ];
+
+        } else{
+            return [
+                'success' => false,
+                'errors' => 'Conteúdo não existe'
+            ];
+        }
+    }
+    public function commentProfile($id, Request $request)
+    {
+        $content = Content::find($id);
+        if($content){
+            $user = $request->user();
+
+            $user->comments()->create([
+                'content_id' => $content->id,
+                'text' => $request->text,
+                'posted_at' => date('Y-m-d H:i:s')
+            ]);
+
+            return [
+                'success' => true,
+                'data' =>  $this->profile($content->user_id,$request),
                 'message' => 'Comment added'
             ];
 

@@ -3,6 +3,7 @@
       <ContactListItem v-for="friend in listFriends" :key="friend.id"
         :friendImage="friend.image"
         :friendName="friend.name"
+        :friendId="friend.id"
       >                    
       </ContactListItem>
   </div>

@@ -47,8 +47,16 @@ export default {
     components: {
         NavBar,
         GridVue,
+    },    
+    methods: {
+        sair() {            
+            this.$store.commit('setUser', null),
+            sessionStorage.clear();
+            this.user = false;
+            this.$router.push('/login')
+        },       
     },
-    beforeCreate() {
+    created() {
         console.log("created()");
         let userAux = this.$store.getters.getUser;
         if (userAux) {
@@ -57,15 +65,6 @@ export default {
             this.$router.push("/login");
         }
     },
-    methods: {
-        sair() {
-            
-            this.$store.commit('setUser', null),
-            sessionStorage.clear();
-            this.user = false;
-            this.$router.push('/login')
-        },       
-    }
 
 };
 </script>

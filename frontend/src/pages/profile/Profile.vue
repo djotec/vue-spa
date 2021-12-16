@@ -37,9 +37,9 @@
                                             <button
                                                 v-if="isFriendPage"
                                                 @click="follow(owner.id)"
-                                                class="btn btn-primary"
+                                                class="btn" :class="isFriend ? 'btn-secondary' : 'btn-primary' "
                                             >
-                                                {{ textButton }}
+                                                {{ isFriend ? 'Seguindo' : 'Seguir' }}
                                             </button>
                                         </div>
                                     </div>
@@ -62,10 +62,10 @@
                                             <div class="row">
                                                 
                                                 <div class="col-sm-4" v-for="item in friendsList" :key="item.id">
-                                                     <router-link :to="'/'+item.id+'/'+$slug(item.name)" class="text-black p-0" >
-                                                        <img :src="item.image" class="card-img-top rounded-2" :alt="item.name">
-                                                            <span class="text-dark border-top">{{ item.name }}</span>
-                                                        </router-link>
+                                                    <router-link :to="'/'+item.id+'/'+$slug(item.name)" class="nav-link text-black p-0"> 
+                                                                <img :src="item.image" class="card-img-top rounded-2" :alt="item.name">
+                                                                    <span class="text-dark">{{ item.name }}</span>
+                                                    </router-link>
                                                 </div>
                                                 
                                             </div>
@@ -132,27 +132,28 @@ export default {
             urlNextPage: null,
             stopscroll: false,
             owner: { image: '', name: '' },
-            isFriendPage: true,
+            isFriendPage: false,
             friendsList: [],
             friendsLoggedList: [],
-            textButton: 'Seguir',
         }
     },
-    methods: {
-        isFriend(){
-            this.textButton
+    computed: {
+        listContents()  {
+            return this.$store.getters.getContentsTimeline;
+        },
+        isFriend() {
 
             for ( let friend of this.friendsLoggedList ) {    
-                if ( friend.id == this.owner.id ){
-                 this.textButton = "Deixar de seguir";
-                 return;
-                }
+                if ( friend.id == this.owner.id ) return true;
             }
-            this.textButton = "Seguir";
-            
-        },
+            return false;
+        }
+    },
+    watch: {
+        '$route': 'refreshPage'
+    },
+    methods: {
         follow(id) {
-            console.log('id: ' + id)
 
             this.$http
                 .post(
@@ -166,11 +167,8 @@ export default {
                 )
                 .then(({ data }) => {
                     if (data.success) {
-                        this.friendsList = data.data;
-                        this.isFriend();
-                        console.log(data)
-                    } else {
-                        console.log(data.errors)
+                        this.friendsLoggedList = data.data;
+                        // this.isFriend();
                     }
                 })
                 .catch((e) => {
@@ -178,7 +176,7 @@ export default {
                 })
         },
 
-        loadFriendsLoggedList(id) {
+        loadProfileFriendsList(id) {
             this.$http
                 .get(this.$urlApi + `user/friendsListProfile/` + id, {
                     headers: {
@@ -190,8 +188,8 @@ export default {
 
                     if (data.success) {
                         this.friendsList = responseData.friends
-                        this.friendsList = responseData.friendsLogged;
-                        this.isFriend();
+                        this.friendsLoggedList = responseData.friendsLogged;
+                        // this.isFriend();
                         console.log(data)
                     } else {
                         console.log(data.errors)
@@ -233,8 +231,7 @@ export default {
                             this.isFriendPage = true
                         }
 
-                        this.loadFriendsLoggedList(this.owner.id);
-                        this.isFriend();
+                        this.loadProfileFriendsList(this.owner.id);
                     }
                     console.log(this.contents)
                 })
@@ -288,15 +285,13 @@ export default {
                 this.user = this.$store.getters.getUser
             }
         },
+        refreshPage(){
+            this.loadUser()
+            this.loadContentList()
+        }
     },
     created() {
-        this.loadUser()
-        this.loadContentList()
-    },
-    computed: {
-        listContents() {
-            return this.$store.getters.getContentsTimeline
-        },
+        this.refreshPage();
     },
 }
 </script>
