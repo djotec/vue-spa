@@ -229,7 +229,10 @@ class UserController extends Controller
             $user->friends()->toggle($friend->id);
             return [
                 'success' => true,
-                'data' => $user->friends,
+                'data' => [
+                    'friends'=> $user->friends,
+                    'followers'=> $friend->followers
+                ],
                 'message' => 'Amigo adicionado'
             ];
         } else {
@@ -245,7 +248,10 @@ class UserController extends Controller
         if ($user) {
             return [
                 'success' => true,
-                'data' => $user->friends,
+                'data' => [
+                    'friends'=> $user->friends,
+                    'followers'=> $user->followers
+                ],
                 'message' => 'Lista de Amigos'
             ];
         } else {
@@ -263,6 +269,7 @@ class UserController extends Controller
                 'success' => true,
                 'data' => [
                     'friends' => $userProfile->friends,
+                    'followers'=> $userProfile->followers,
                     'friendsLogged' => $logged->friends,
                  ],
                 'message' => 'Lista de Amigos'

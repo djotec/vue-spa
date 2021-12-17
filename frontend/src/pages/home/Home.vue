@@ -71,9 +71,15 @@
         </span>
 
         <span slot="menudireito">
-            <h5 class="text-dark border-top">Contatos</h5>
+            <h5 class="text-dark border-top pt-3">Contatos</h5>
             <ContactList
                 :listFriends="friends"
+                >
+            </ContactList>
+            <div v-if="!friends.length">Nenhum Usuário</div>
+            <h5 class="text-dark border-top mt-3 pt-3">Seguidores</h5>
+            <ContactList
+                :listFriends="followers"
                 >
             </ContactList>
             <div v-if="!friends.length">Nenhum Usuário</div>
@@ -109,6 +115,7 @@ export default {
             urlNextPage: null,
             stopscroll: false,
             friends: [],
+            followers: [],
         }
     },
     methods: {
@@ -142,7 +149,8 @@ export default {
                     const responseData = data.data
 
                     if (data.success) {
-                        this.friends = responseData;
+                        this.friends = responseData.friends;
+                        this.followers = responseData.followers;
                         console.log(data);
                     } else {                        
                         console.log(data.errors)

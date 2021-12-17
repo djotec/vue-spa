@@ -36,16 +36,20 @@ Route::middleware('auth:api')->post('/user/friend', "UserController@friend");
 Route::middleware('auth:api')->get('/user/friendsList', "UserController@friendsList");
 Route::middleware('auth:api')->get('/user/friendsListProfile/{id}', "UserController@friendsListProfile");
 Route::get('/tests', function(){
-    $user = User::find(6);
+    $user = User::find(3);
+    $friends = $user->friends->pluck('id');
+    $friends->push($user->id);
+    $contents = Content::wherein('user_id', $friends)->with(['user'])->orderBy('posted_at', 'DESC')->paginate(5);
 
-    $content = Content::find(31);
+    dd($contents);
+
     // $user->comments()->create([
     //     'content_id' => $content->id,
     //     'text' => 'Eu sou o Melhor',
     //     'posted_at' => date('Y-m-d')
     // ]);
 
-    return $content->comments;
+    // return $content->comments;
 
 
     /* Add Content

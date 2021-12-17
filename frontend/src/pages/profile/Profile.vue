@@ -72,6 +72,22 @@
                                             
                                         </div>
                                     </div>
+                                    <div v-if="followers.length" class="card shadow-sm w-100 mb-3">
+                                        <div class="card-body ">
+                                            <h4 class="text-dark">Seguidores</h4> 
+                                            <div class="row">
+                                                
+                                                <div class="col-sm-4" v-for="item in followers" :key="item.id">
+                                                    <router-link :to="'/'+item.id+'/'+$slug(item.name)" class="nav-link text-black p-0"> 
+                                                                <img :src="item.image" class="card-img-top rounded-2" :alt="item.name">
+                                                                    <span class="text-dark">{{ item.name }}</span>
+                                                    </router-link>
+                                                </div>
+                                                
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-sm-7">
                                     <card-conteudo-vue
@@ -134,6 +150,7 @@ export default {
             owner: { image: '', name: '' },
             isFriendPage: false,
             friendsList: [],
+            followers: [],
             friendsLoggedList: [],
         }
     },
@@ -165,9 +182,11 @@ export default {
                         },
                     }
                 )
-                .then(({ data }) => {
+                .then(({ data }) => {                    
+                    const responseData = data.data
                     if (data.success) {
-                        this.friendsLoggedList = data.data;
+                        this.friendsLoggedList = responseData.friends;
+                        this.followers = responseData.followers;
                         // this.isFriend();
                     }
                 })
@@ -187,7 +206,8 @@ export default {
                     const responseData = data.data
 
                     if (data.success) {
-                        this.friendsList = responseData.friends
+                        this.friendsList = responseData.friends;
+                        this.followers = responseData.followers;
                         this.friendsLoggedList = responseData.friendsLogged;
                         // this.isFriend();
                         console.log(data)
